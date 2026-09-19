@@ -1,0 +1,392 @@
+{
+  "project_name": "PAZOOKA Streetwear Storefront",
+  "archetype": "High-Voltage Brutalist & Fashion Editorial Streetwear",
+  "design_philosophy": "High-contrast Swiss/Brutalist layout meets Gen-Z streetwear energy. Pure stark white and deep matte black foundation ignited by high-voltage Acid Lime accents (#D4FF00). Heavy condensed uppercase typography, asymmetric bento grids, full-width cinematic banners, hover image swaps, and liquid smooth interaction feedback.",
+  "theme": {
+    "default_mode": "light",
+    "background_color": "#FFFFFF",
+    "dark_section_bg": "#0A0A0A",
+    "surface_light": "#F5F5F7",
+    "surface_dark": "#121212"
+  },
+  "colors": {
+    "primary_bg": "#FFFFFF",
+    "secondary_bg": "#F4F4F5",
+    "dark_bg": "#09090B",
+    "text_primary": "#09090B",
+    "text_muted": "#71717A",
+    "text_on_dark": "#FFFFFF",
+    "text_muted_on_dark": "#A1A1AA",
+    "accent_acid_lime": "#D4FF00",
+    "accent_acid_lime_hover": "#C2EB00",
+    "accent_lime_text": "#000000",
+    "border_light": "#E4E4E7",
+    "border_dark": "#27272A",
+    "badge_sale": "#FF3B30",
+    "badge_new": "#D4FF00"
+  },
+  "typography": {
+    "font_imports": [
+      "https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Syne:wght@700;800&family=Outfit:wght@400;500;600;700;900&display=swap"
+    ],
+    "display_heading_font": "'Bebas Neue', 'Syne', sans-serif",
+    "editorial_subheading_font": "'Syne', 'Outfit', sans-serif",
+    "body_font": "'Outfit', sans-serif",
+    "mono_font": "'Space Mono', monospace",
+    "hierarchy": {
+      "hero_title": "text-6xl sm:text-7xl lg:text-8xl tracking-tight font-black uppercase leading-none",
+      "section_heading": "text-4xl sm:text-5xl lg:text-6xl tracking-tight font-extrabold uppercase leading-none",
+      "banner_heading": "text-3xl sm:text-5xl lg:text-7xl font-black uppercase tracking-tight",
+      "card_title": "text-lg sm:text-xl font-bold uppercase tracking-tight",
+      "label_overline": "text-xs font-mono uppercase tracking-[0.25em] text-zinc-500",
+      "price_text": "font-mono text-base font-bold tracking-tight",
+      "badge_text": "font-mono text-xs font-bold uppercase tracking-wider"
+    }
+  },
+  "spacing_and_layout": {
+    "container_padding": "px-4 sm:px-8 lg:px-12 max-w-[1536px] mx-auto",
+    "section_vertical_gap": "py-16 sm:py-24 lg:py-32",
+    "grid_gap": "gap-6 sm:gap-8 lg:gap-10",
+    "border_radius": "rounded-none",
+    "card_style": "border border-zinc-200 bg-white hover:border-black transition-all duration-300 relative group overflow-hidden"
+  },
+  "motion_and_effects": {
+    "smooth_scroll": "Lenis smooth scrolling engine integration",
+    "animations": {
+      "hero_text_reveal": "framer-motion staggered line mask reveal with Y-offset -100% to 0%",
+      "product_card_hover": "scale-105 transform ease-out duration-500 for image, instant opacity swap to alternate angle image",
+      "marquee_strip": "react-fast-marquee or seamless horizontal loop ticker @ 40s duration",
+      "drawer_slide": "framer-motion right slide-in with backdrop blur-sm bg-black/40",
+      "cta_button_hover": "hover:bg-black hover:text-[#D4FF00] hover:shadow-[4px_4px_0px_0px_rgba(212,255,0,1)] transition-all duration-200"
+    }
+  },
+  "component_architecture": {
+    "navigation_and_header": {
+      "promo_bar": "Sticky black top bar with infinite scrolling ticker in Acid Lime (#D4FF00) font featuring drop alerts, free shipping notice, and code 'PAZOOKA10'",
+      "navbar": "Sticky high-contrast navbar with white/blur background, large PAZOOKA brand typography, main category links (ALL DROPS, OVERSIZED, REGULAR FIT, CAPS, CAMPAIGN VOL.04, EDITORIAL), search overlay, Wishlist drawer trigger with count badge, Cart drawer trigger with count badge",
+      "mega_menu": "Hover-activated multi-column dropdown previewing top trending drops, category thumbnails, and lookbook visuals"
+    },
+    "hero_section": {
+      "type": "Full-Width Cinematic Editorial Banner",
+      "elements": [
+        "Massive layered typography 'PAZOOKA // VOL.04 DROP'",
+        "High-definition street model editorial photo with subtle dark gradient overlay",
+        "Floating kinetic badges in Acid Lime: 'LIMITED EDITION // 250 PIECES ONLY'",
+        "Dual action buttons: 'SHOP NEW DROPS' (Solid Black + Acid Lime text) & 'EXPLORE LOOKBOOK' (Outlined White)"
+      ]
+    },
+    "marquee_banner": {
+      "text": "PAZOOKA STREETWEAR // OVERSIZED FIT SPECIALISTS // HEAVYWEIGHT 280 GSM COTTON // NEW DROPS EVERY FRIDAY // FREE WORLDWIDE SHIPPING",
+      "style": "bg-black text-[#D4FF00] font-mono py-3 text-sm font-bold tracking-widest border-y border-zinc-800"
+    },
+    "huge_campaign_banners": {
+      "description": "2-3 massive full-bleed drop banners interspersed between product sections to fulfill user explicit request for huge banners",
+      "banner_1": "DARK MATTE CAVE // 'THE ACID CULTURE COLLECTION' - Heavy weight streetwear with glowing lime typography and dual grid visuals",
+      "banner_2": "URBAN ARCHITECTURE // 'OVERSIZED TEE MATRIX' - 10 unique cuts designed for Gen-Z silhouette perfection"
+    },
+    "product_grid": {
+      "categories": [
+        "All Products",
+        "Oversized Tees",
+        "Regular Fit Tees",
+        "Caps & Headwear"
+      ],
+      "card_features": [
+        "Main product image + hover swap to secondary editorial/back-print shot",
+        "Quick Add Size Selector popover on hover (S, M, L, XL, XXL)",
+        "Wishlist heart button trigger",
+        "Tag overlays: 'NEW DROP', '280 GSM', 'LIMITED', 'BESTSELLER'",
+        "Product Title, Category label, Price in font-mono with discount stroke if applicable"
+      ]
+    },
+    "collections_bento_grid": {
+      "mode": "Asymmetric Tetris Bento Grid",
+      "cells": [
+        {
+          "title": "OVERSIZED TEES",
+          "subtitle": "280 GSM Heavyweight Drop",
+          "span": "col-span-12 md:col-span-8 row-span-2",
+          "accent": "Acid Lime badge"
+        },
+        {
+          "title": "REGULAR FIT",
+          "subtitle": "Clean Tailored Cut",
+          "span": "col-span-12 md:col-span-4 row-span-1"
+        },
+        {
+          "title": "CAPS & HEADWEAR",
+          "subtitle": "5 Panel & Trucker Caps",
+          "span": "col-span-12 md:col-span-4 row-span-1"
+        }
+      ]
+    },
+    "editorial_manifesto": {
+      "bg": "#0A0A0A",
+      "text_color": "#FFFFFF",
+      "headline": "NO RULES. NO COMPROMISE. PURE STREET CULTURE.",
+      "content": "Pazooka was forged in the underground alleyways of urban fashion. We don't do seasonal trends; we drop heavy-hitting, limited-run pieces built with premium 280 GSM cotton and relaxed silhouettes that command attention.",
+      "cta": "JOIN THE MOVEMENT"
+    },
+    "product_catalog_seed": {
+      "total_items": 21,
+      "breakdown": {
+        "oversized_tshirts": 10,
+        "regular_fit_tshirts": 6,
+        "caps": 5
+      }
+    }
+  },
+  "image_urls": {
+    "hero_banner": "https://images.pexels.com/photos/18584221/pexels-photo-18584221.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",
+    "campaign_banner_1": "https://images.unsplash.com/photo-1721637686340-de9f8cebda5a?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjAzNzl8MHwxfHNlYXJjaHwxfHx1cmJhbiUyMHN0cmVldHdlYXIlMjBtb2RlbCUyMG92ZXJzaXplZCUyMHRzaGlydCUyMGZhc2hpb24lMjBlZGl0b3JpYWx8ZW58MHx8fHwxNzg5ODU0MTAyfDA&ixlib=rb-4.1.0&q=85",
+    "campaign_banner_2": "https://images.unsplash.com/photo-1721637635502-b0abaaa75edb?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjAzNzl8MHwxfHNlYXJjaHwyfHx1cmJhbiUyMHN0cmVldHdlYXIlMjBtb2RlbCUyMG92ZXJzaXplZCUyMHRzaGlydCUyMGZhc2hpb24lMjBlZGl0b3JpYWx8ZW58MHx8fHwxNzg5ODU0MTAyfDA&ixlib=rb-4.1.0&q=85",
+    "oversized_tees": [
+      {
+        "id": "paz-01",
+        "name": "CYBERNETIC ACID OVERSIZED TEE",
+        "price": 49,
+        "original_price": 65,
+        "tag": "NEW DROP",
+        "gsm": "280 GSM",
+        "fit": "Oversized",
+        "image_main": "https://images.unsplash.com/photo-1635650804060-bb009bcb2ea5?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjAzNzl8MHwxfHNlYXJjaHszfHx1cmJhbiUyMHN0cmVldHdlYXIlMjBtb2RlbCUyMG92ZXJzaXplZCUyMHRzaGlydCUyMGZhc2hpb24lMjBlZGl0b3JpYWx8ZW58MHx8fHwxNzg5ODU0MTAyfDA&ixlib=rb-4.1.0&q=85",
+        "image_alt": "https://images.pexels.com/photos/18584221/pexels-photo-18584221.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"
+      },
+      {
+        "id": "paz-02",
+        "name": "NEON METROPOLIS GRAPHIC TEE",
+        "price": 54,
+        "original_price": null,
+        "tag": "LIMITED",
+        "gsm": "300 GSM",
+        "fit": "Oversized",
+        "image_main": "https://images.unsplash.com/photo-1721637686340-de9f8cebda5a?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjAzNzl8MHwxfHNlYXJjaHwxfHx1cmJhbiUyMHN0cmVldHdlYXIlMjBtb2RlbCUyMG92ZXJzaXplZCUyMHRzaGlydCUyMGZhc2hpb24lMjBlZGl0b3JpYWx8ZW58MHx8fHwxNzg5ODU0MTAyfDA&ixlib=rb-4.1.0&q=85",
+        "image_alt": "https://images.unsplash.com/photo-1721637635502-b0abaaa75edb?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjAzNzl8MHwxfHNlYXJjaHwyfHx1cmJhbiUyMHN0cmVldHdlYXIlMjBtb2RlbCUyMG92ZXJzaXplZCUyMHRzaGlydCUyMGZhc2hpb24lMjBlZGl0b3JpYWx8ZW58MHx8fHwxNzg5ODU0MTAyfDA&ixlib=rb-4.1.0&q=85"
+      },
+      {
+        "id": "paz-03",
+        "name": "UNRULY ARCHIVE RELAXED FIT TEE",
+        "price": 45,
+        "original_price": 55,
+        "tag": "BESTSELLER",
+        "gsm": "280 GSM",
+        "fit": "Oversized",
+        "image_main": "https://images.unsplash.com/photo-1535487958887-032fb5767ade?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjAzNzl8MHwxfHNlYXJjaHw0fHx1cmJhbiUyMHN0cmVldHdlYXIlMjBtb2RlbCUyMG92ZXJzaXplZCUyMHRzaGlydCUyMGZhc2hpb24lMjBlZGl0b3JpYWx8ZW58MHx8fHwxNzg5ODU0MTAyfDA&ixlib=rb-4.1.0&q=85",
+        "image_alt": "https://images.pexels.com/photos/32819862/pexels-photo-32819862.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"
+      },
+      {
+        "id": "paz-04",
+        "name": "TOXIC MATRIX HEAVY COTTON TEE",
+        "price": 52,
+        "original_price": null,
+        "tag": "NEW DROP",
+        "gsm": "280 GSM",
+        "fit": "Oversized",
+        "image_main": "https://images.pexels.com/photos/32819862/pexels-photo-32819862.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",
+        "image_alt": "https://images.unsplash.com/photo-1635650804060-bb009bcb2ea5?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjAzNzl8MHwxfHNlYXJjaHszfHx1cmJhbiUyMHN0cmVldHdlYXIlMjBtb2RlbCUyMG92ZXJzaXplZCUyMHRzaGlydCUyMGZhc2hpb24lMjBlZGl0b3JpYWx8ZW58MHx8fHwxNzg5ODU0MTAyfDA&ixlib=rb-4.1.0&q=85"
+      },
+      {
+        "id": "paz-05",
+        "name": "RAW MONOCHROME PUFF PRINT TEE",
+        "price": 48,
+        "original_price": 60,
+        "tag": "HOT",
+        "gsm": "280 GSM",
+        "fit": "Oversized",
+        "image_main": "https://images.unsplash.com/photo-1646197879186-2add4e5225a6?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA2ODl8MHwxfHNlYXJjaHszfHxzdHJlZXR3ZWFyJTIwYXBwYXJlbCUyMGNsb3RoaW5nJTIwaG9vZGllJTIwY2FwJTIwbW9kZWwlMjBwb3J0cmFpdCUyMHN0dWRpb3xlbnwwfHx8fDE3ODk4NTQxMDJ8MA&ixlib=rb-4.1.0&q=85",
+        "image_alt": "https://images.unsplash.com/photo-1646197879190-78a962aab29b?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA2ODl8MHwxfHNlYXJjaHw0fHxzdHJlZXR3ZWFyJTIwYXBwYXJlbCUyMGNsb3RoaW5nJTIwaG9vZGllJTIwY2FwJTIwbW9kZWwlMjBwb3J0cmFpdCUyMHN0dWRpb3xlbnwwfHx8fDE3ODk4NTQxMDJ8MA&ixlib=rb-4.1.0&q=85"
+      },
+      {
+        "id": "paz-06",
+        "name": "BRUTALIST ARCHITECTURE TEE",
+        "price": 50,
+        "original_price": null,
+        "tag": "NEW DROP",
+        "gsm": "280 GSM",
+        "fit": "Oversized",
+        "image_main": "https://images.unsplash.com/photo-1669266586576-639523db9306?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA2ODl8MHwxfHNlYXJjaHwxfHxzdHJlZXR3ZWFyJTIwYXBwYXJlbCUyMGNsb3RoaW5nJTIwaG9vZGllJTIwY2FwJTIwbW9kZWwlMjBwb3J0cmFpdCUyMHN0dWRpb3xlbnwwfHx8fDE3ODk4NTQxMDJ8MA&ixlib=rb-4.1.0&q=85",
+        "image_alt": "https://images.unsplash.com/photo-1721664705833-eec0584e7222?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA2ODl8MHwxfHNlYXJjaHwyfHxzdHJlZXR3ZWFyJTIwYXBwYXJlbCUyMGNsb3RoaW5nJTIwaG9vZGllJTIwY2FwJTIwbW9kZWwlMjBwb3J0cmFpdCUyMHN0dWRpb3xlbnwwfHx8fDE3ODk4NTQxMDJ8MA&ixlib=rb-4.1.0&q=85"
+      },
+      {
+        "id": "paz-07",
+        "name": "UNDERGROUND DRIFT VINTAGE WASH TEE",
+        "price": 56,
+        "original_price": 70,
+        "tag": "LIMITED",
+        "gsm": "320 GSM",
+        "fit": "Oversized",
+        "image_main": "https://images.pexels.com/photos/14241847/pexels-photo-14241847.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",
+        "image_alt": "https://images.pexels.com/photos/28701960/pexels-photo-28701960.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"
+      },
+      {
+        "id": "paz-08",
+        "name": "ACID WAVE DISTRESSED TEE",
+        "price": 46,
+        "original_price": null,
+        "tag": "POPULAR",
+        "gsm": "280 GSM",
+        "fit": "Oversized",
+        "image_main": "https://images.pexels.com/photos/28701960/pexels-photo-28701960.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",
+        "image_alt": "https://images.pexels.com/photos/14241847/pexels-photo-14241847.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"
+      },
+      {
+        "id": "paz-09",
+        "name": "SIGNAL NOISE EMBROIDERED TEE",
+        "price": 55,
+        "original_price": 68,
+        "tag": "LIMITED",
+        "gsm": "280 GSM",
+        "fit": "Oversized",
+        "image_main": "https://images.unsplash.com/photo-1532332248682-206cc786359f?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NDQ2Mzl8MHwxfHNlYXJjaHszfHxzdHJlZXR3ZWFyJTIwYmFzZWJhbGwlMjBjYXAlMjBiZWFuaWUlMjBoYXQlMjBmYXNoaW9uJTIwbW9kZWx8ZW58MHx8fHwxNzg5ODU0MTA4fDA&ixlib=rb-4.1.0&q=85",
+        "image_alt": "https://images.unsplash.com/photo-1635650804483-2a77a8c9e728?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NDQ2Mzl8MHwxfHNlYXJjaHxfHxzdHJlZXR3ZWFyJTIwYmFzZWJhbGwlMjBjYXAlMjBiZWFuaWUlMjBoYXQlMjBmYXNoaW9uJTIwbW9kZWx8ZW58MHx8fHwxNzg5ODU0MTA4fDA&ixlib=rb-4.1.0&q=85"
+      },
+      {
+        "id": "paz-10",
+        "name": "PAZOOKA ZERO HOUR BOX TEE",
+        "price": 42,
+        "original_price": 50,
+        "tag": "NEW DROP",
+        "gsm": "280 GSM",
+        "fit": "Oversized",
+        "image_main": "https://images.unsplash.com/photo-1635650804483-2a77a8c9e728?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NDQ2Mzl8MHwxfHNlYXJjaHxfHxzdHJlZXR3ZWFyJTIwYmFzZWJhbGwlMjBjYXAlMjBiZWFuaWUlMjBoYXQlMjBmYXNoaW9uJTIwbW9kZWx8ZW58MHx8fHwxNzg5ODU0MTA4fDA&ixlib=rb-4.1.0&q=85",
+        "image_alt": "https://images.unsplash.com/photo-1532332248682-206cc786359f?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NDQ2Mzl8MHwxfHNlYXJjaHszfHxzdHJlZXR3ZWFyJTIwYmFzZWJhbGwlMjBjYXAlMjBiZWFuaWUlMjBoYXQlMjBmYXNoaW9uJTIwbW9kZWx8ZW58MHx8fHwxNzg5ODU0MTA4fDA&ixlib=rb-4.1.0&q=85"
+      }
+    ],
+    "regular_fit_tees": [
+      {
+        "id": "paz-11",
+        "name": "ESSENTIAL LOGO REGULAR TEE - WHITE",
+        "price": 38,
+        "original_price": 45,
+        "tag": "CORE",
+        "gsm": "240 GSM",
+        "fit": "Regular Fit",
+        "image_main": "https://images.unsplash.com/photo-1523380744952-b7e00e6e2ffa?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NDQ2Mzl8MHwxfHNlYXJjaHwyfHxzdHJlZXR3ZWFyJTIwYmFzZWJhbGwlMjBjYXAlMjBiZWFuaWUlMjBoYXQlMjBmYXNoaW9uJTIwbW9kZWx8ZW58MHx8fHwxNzg5ODU0MTA4fDA&ixlib=rb-4.1.0&q=85",
+        "image_alt": "https://images.unsplash.com/photo-1574427797991-b086946fa9e7?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NDQ2Mzl8MHwxfHNlYXJjaHw0fHxzdHJlZXR3ZWFyJTIwYmFzZWJhbGwlMjBjYXAlMjBiZWFuaWUlMjBoYXQlMjBmYXNoaW9uJTIwbW9kZWx8ZW58MHx8fHwxNzg5ODU0MTA4fDA&ixlib=rb-4.1.0&q=85"
+      },
+      {
+        "id": "paz-12",
+        "name": "ESSENTIAL LOGO REGULAR TEE - BLACK",
+        "price": 38,
+        "original_price": null,
+        "tag": "CORE",
+        "gsm": "240 GSM",
+        "fit": "Regular Fit",
+        "image_main": "https://images.unsplash.com/photo-1574427797991-b086946fa9e7?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NDQ2Mzl8MHwxfHNlYXJjaHw0fHxzdHJlZXR3ZWFyJTIwYmFzZWJhbGwlMjBjYXAlMjBiZWFuaWUlMjBoYXQlMjBmYXNoaW9uJTIwbW9kZWx8ZW58MHx8fHwxNzg5ODU0MTA4fDA&ixlib=rb-4.1.0&q=85",
+        "image_alt": "https://images.unsplash.com/photo-1523380744952-b7e00e6e2ffa?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NDQ2Mzl8MHwxfHNlYXJjaHwyfHxzdHJlZXR3ZWFyJTIwYmFzZWJhbGwlMjBjYXAlMjBiZWFuaWUlMjBoYXQlMjBmYXNoaW9uJTIwbW9kZWx8ZW58MHx8fHwxNzg5ODU0MTA4fDA&ixlib=rb-4.1.0&q=85"
+      },
+      {
+        "id": "paz-13",
+        "name": "KINETIC TYPE FIT TEE",
+        "price": 40,
+        "original_price": 48,
+        "tag": "POPULAR",
+        "gsm": "240 GSM",
+        "fit": "Regular Fit",
+        "image_main": "https://images.pexels.com/photos/35515095/pexels-photo-35515095.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",
+        "image_alt": "https://images.pexels.com/photos/15752006/pexels-photo-15752006.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"
+      },
+      {
+        "id": "paz-14",
+        "name": "URBAN CONCRETE TAILORED TEE",
+        "price": 42,
+        "original_price": null,
+        "tag": "NEW",
+        "gsm": "250 GSM",
+        "fit": "Regular Fit",
+        "image_main": "https://images.pexels.com/photos/15752006/pexels-photo-15752006.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",
+        "image_alt": "https://images.pexels.com/photos/35515095/pexels-photo-35515095.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"
+      },
+      {
+        "id": "paz-15",
+        "name": "ACID ACCENT GRAPHIC TEE",
+        "price": 44,
+        "original_price": 52,
+        "tag": "HOT",
+        "gsm": "240 GSM",
+        "fit": "Regular Fit",
+        "image_main": "https://images.unsplash.com/photo-1646197879186-2add4e5225a6?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA2ODl8MHwxfHNlYXJjaHszfHxzdHJlZXR3ZWFyJTIwYXBwYXJlbCUyMGNsb3RoaW5nJTIwaG9vZGllJTIwY2FwJTIwbW9kZWwlMjBwb3J0cmFpdCUyMHN0dWRpb3xlbnwwfHx8fDE3ODk4NTQxMDJ8MA&ixlib=rb-4.1.0&q=85",
+        "image_alt": "https://images.unsplash.com/photo-1646197879190-78a962aab29b?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA2ODl8MHwxfHNlYXJjaHw0fHxzdHJlZXR3ZWFyJTIwYXBwYXJlbCUyMGNsb3RoaW5nJTIwaG9vZGllJTIwY2FwJTIwbW9kZWwlMjBwb3J0cmFpdCUyMHN0dWRpb3xlbnwwfHx8fDE3ODk4NTQxMDJ8MA&ixlib=rb-4.1.0&q=85"
+      },
+      {
+        "id": "paz-16",
+        "name": "SIGNATURE EMBLEM FITTED TEE",
+        "price": 36,
+        "original_price": null,
+        "tag": "CORE",
+        "gsm": "240 GSM",
+        "fit": "Regular Fit",
+        "image_main": "https://images.unsplash.com/photo-1669266586576-639523db9306?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA2ODl8MHwxfHNlYXJjaHwxfHxzdHJlZXR3ZWFyJTIwYXBwYXJlbCUyMGNsb3RoaW5nJTIwaG9vZGllJTIwY2FwJTIwbW9kZWwlMjBwb3J0cmFpdCUyMHN0dWRpb3xlbnwwfHx8fDE3ODk4NTQxMDJ8MA&ixlib=rb-4.1.0&q=85",
+        "image_alt": "https://images.unsplash.com/photo-1721664705833-eec0584e7222?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA2ODl8MHwxfHNlYXJjaHwyfHxzdHJlZXR3ZWFyJTIwYXBwYXJlbCUyMGNsb3RoaW5nJTIwaG9vZGllJTIwY2FwJTIwbW9kZWwlMjBwb3J0cmFpdCUyMHN0dWRpb3xlbnwwfHx8fDE3ODk4NTQxMDJ8MA&ixlib=rb-4.1.0&q=85"
+      }
+    ],
+    "caps": [
+      {
+        "id": "paz-17",
+        "name": "PAZOOKA EMBROIDERED TRUCKER CAP",
+        "price": 28,
+        "original_price": 35,
+        "tag": "BESTSELLER",
+        "fit": "Adjustable",
+        "image_main": "https://images.unsplash.com/photo-1523380744952-b7e00e6e2ffa?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NDQ2Mzl8MHwxfHNlYXJjaHwyfHxzdHJlZXR3ZWFyJTIwYmFzZWJhbGwlMjBjYXAlMjBiZWFuaWUlMjBoYXQlMjBmYXNoaW9uJTIwbW9kZWx8ZW58MHx8fHwxNzg5ODU0MTA4fDA&ixlib=rb-4.1.0&q=85",
+        "image_alt": "https://images.unsplash.com/photo-1574427797991-b086946fa9e7?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NDQ2Mzl8MHwxfHNlYXJjaHw0fHxzdHJlZXR3ZWFyJTIwYmFzZWJhbGwlMjBjYXAlMjBiZWFuaWUlMjBoYXQlMjBmYXNoaW9uJTIwbW9kZWx8ZW58MHx8fHwxNzg5ODU0MTA4fDA&ixlib=rb-4.1.0&q=85"
+      },
+      {
+        "id": "paz-18",
+        "name": "ACID LIME LOGO 5-PANEL SNAPBACK",
+        "price": 32,
+        "original_price": null,
+        "tag": "NEW DROP",
+        "fit": "Snapback",
+        "image_main": "https://images.unsplash.com/photo-1574427797991-b086946fa9e7?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NDQ2Mzl8MHwxfHNlYXJjaHw0fHxzdHJlZXR3ZWFyJTIwYmFzZWJhbGwlMjBjYXAlMjBiZWFuaWUlMjBoYXQlMjBmYXNoaW9uJTIwbW9kZWx8ZW58MHx8fHwxNzg5ODU0MTA4fDA&ixlib=rb-4.1.0&q=85",
+        "image_alt": "https://images.unsplash.com/photo-1523380744952-b7e00e6e2ffa?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NDQ2Mzl8MHwxfHNlYXJjaHwyfHxzdHJlZXR3ZWFyJTIwYmFzZWJhbGwlMjBjYXAlMjBiZWFuaWUlMjBoYXQlMjBmYXNoaW9uJTIwbW9kZWx8ZW58MHx8fHwxNzg5ODU0MTA4fDA&ixlib=rb-4.1.0&q=85"
+      },
+      {
+        "id": "paz-19",
+        "name": "BLACKOUT TACTICAL DAD HAT",
+        "price": 26,
+        "original_price": 32,
+        "tag": "LIMITED",
+        "fit": "Strapback",
+        "image_main": "https://images.pexels.com/photos/35515095/pexels-photo-35515095.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",
+        "image_alt": "https://images.pexels.com/photos/15752006/pexels-photo-15752006.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"
+      },
+      {
+        "id": "paz-20",
+        "name": "UNRULY RETRO BASEBALL CAP",
+        "price": 30,
+        "original_price": null,
+        "tag": "POPULAR",
+        "fit": "Fitted",
+        "image_main": "https://images.pexels.com/photos/15752006/pexels-photo-15752006.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",
+        "image_alt": "https://images.pexels.com/photos/35515095/pexels-photo-35515095.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"
+      },
+      {
+        "id": "paz-21",
+        "name": "ACID MONOGRAM HEAVY BEANIE",
+        "price": 25,
+        "original_price": 30,
+        "tag": "HOT",
+        "fit": "One Size",
+        "image_main": "https://images.unsplash.com/photo-1532332248682-206cc786359f?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NDQ2Mzl8MHwxfHNlYXJjaHszfHxzdHJlZXR3ZWFyJTIwYmFzZWJhbGwlMjBjYXAlMjBiZWFuaWUlMjBoYXQlMjBmYXNoaW9uJTIwbW9kZWx8ZW58MHx8fHwxNzg5ODU0MTA4fDA&ixlib=rb-4.1.0&q=85",
+        "image_alt": "https://images.unsplash.com/photo-1635650804483-2a77a8c9e728?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NDQ2Mzl8MHwxfHNlYXJjaHxfHxzdHJlZXR3ZWFyJTIwYmFzZWJhbGwlMjBjYXAlMjBiZWFuaWUlMjBoYXQlMjBmYXNoaW9uJTIwbW9kZWx8ZW58MHx8fHwxNzg5ODU0MTA4fDA&ixlib=rb-4.1.0&q=85"
+      }
+    ]
+  },
+  "instructions_to_main_agent": [
+    "1. Inject Google Fonts in index.html or index.css to load Bebas Neue, Syne, Space Mono, and Outfit.",
+    "2. Implement Lenis smooth scroll or Framer Motion scroll container.",
+    "3. Build all 21 products into a structured mock dataset so filters (Oversized, Regular, Caps, Size, Price range, Sort) work real-time.",
+    "4. Ensure CTAs use the high-voltage Acid Lime accent (#D4FF00) with strong black typography on hover or active state.",
+    "5. Include 'HUGE BANNERS' as requested: full-bleed visual blocks between product grids with kinetic typography overlays.",
+    "6. Add interactive drawers for Cart & Wishlist with smooth Framer Motion slide-in animations.",
+    "7. Add a quick view modal and full product detail view with size selector (S, M, L, XL, XXL) and size guide chart popup.",
+    "8. Implement demo checkout flow with simulated order confirmation receipt modal."
+  ],
+  "UNIVERSAL GUIDELINES FOR MAIN AGENT": {
+    "data_testid_rule": "ALL interactive components MUST include explicit data-testid attributes (e.g. data-testid='add-to-cart-btn-paz-01', data-testid='wishlist-toggle-paz-01', data-testid='cart-drawer-trigger', data-testid='size-btn-m').",
+    "anti_slop": "Do not center everything. Use asymmetric grids, generous negative space, brutalist borders, and layered uppercase typography.",
+    "contrast": "Ensure 100% readability. Navbar must have subtle background blur backdrop-blur-md bg-white/90. No transparent text overlays that blend invisibly into backgrounds.",
+    "toast": "Use sonner for notifications ('Added to cart', 'Item added to wishlist', 'Promo code applied')."
+  }
+}
