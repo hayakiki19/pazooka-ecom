@@ -28,7 +28,7 @@ const MEGA_VIBE = [
 
 const MEGA_FEATURED = [
   {
-    img: "https://images.unsplash.com/photo-1721637686340-de9f8cebda5a?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjAzNzl8MHwxfHNlYXJjaHwxfHx1cmJhbiUyMHN0cmVldHdlYXIlMjBtb2RlbCUyMG92ZXJzaXplZCUyMHRzaGlydCUyMGZhc2hpb24lMjBlZGl0b3JpYWx8ZW58MHx8fHwxNzg5ODU0MTAyfDA&ixlib=rb-4.1.0&q=85",
+    img: "https://images.unsplash.com/photo-1721637686340-de9f8cebda5a?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjAzNzl8MHwxfHNlYXJjaHwxfHx1cmJhbiUyMHN0cmVldHdlYXIlMjBtb2RlbCUyMG92ZXJzaXplZCUyMHRzaGlydCUyMGZhc2hpb24lMjBlZGl0b3JpYWx8ZW58MHx8fHwxNzg5ODU0MTAyfDA&ixlib=rb-4.1.0&q=75&w=600",
     label: "NEON METROPOLIS TEE",
     to: "/product/paz-02",
   },

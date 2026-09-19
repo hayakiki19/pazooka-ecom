@@ -5,14 +5,14 @@ import { ArrowRight, ArrowUpRight } from "lucide-react";
 import { fetchProducts } from "../lib/api";
 import ProductCard from "../components/ProductCard";
 import Marquee from "../components/Marquee";
-import { MaskedLine, Reveal } from "../components/motion";
+import { Reveal } from "../components/motion";
 
 const HERO_IMG = "https://images.pexels.com/photos/18584221/pexels-photo-18584221.jpeg?auto=compress&cs=tinysrgb&w=1600&h=1100&fit=crop";
-const CAMPAIGN_1 = "https://images.unsplash.com/photo-1721637686340-de9f8cebda5a?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjAzNzl8MHwxfHNlYXJjaHwxfHx1cmJhbiUyMHN0cmVldHdlYXIlMjBtb2RlbCUyMG92ZXJzaXplZCUyMHRzaGlydCUyMGZhc2hpb24lMjBlZGl0b3JpYWx8ZW58MHx8fHwxNzg5ODU0MTAyfDA&ixlib=rb-4.1.0&q=85";
-const CAMPAIGN_2 = "https://images.unsplash.com/photo-1721637635502-b0abaaa75edb?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjAzNzl8MHwxfHNlYXJjaHwyfHx1cmJhbiUyMHN0cmVldHdlYXIlMjBtb2RlbCUyMG92ZXJzaXplZCUyMHRzaGlydCUyMGZhc2hpb24lMjBlZGl0b3JpYWx8ZW58MHx8fHwxNzg5ODU0MTAyfDA&ixlib=rb-4.1.0&q=85";
+const CAMPAIGN_1 = "https://images.unsplash.com/photo-1721637686340-de9f8cebda5a?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjAzNzl8MHwxfHNlYXJjaHwxfHx1cmJhbiUyMHN0cmVldHdlYXIlMjBtb2RlbCUyMG92ZXJzaXplZCUyMHRzaGlydCUyMGZhc2hpb24lMjBlZGl0b3JpYWx8ZW58MHx8fHwxNzg5ODU0MTAyfDA&ixlib=rb-4.1.0&q=75&w=1600";
+const CAMPAIGN_2 = "https://images.unsplash.com/photo-1721637635502-b0abaaa75edb?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjAzNzl8MHwxfHNlYXJjaHwyfHx1cmJhbiUyMHN0cmVldHdlYXIlMjBtb2RlbCUyMG92ZXJzaXplZCUyMHRzaGlydCUyMGZhc2hpb24lMjBlZGl0b3JpYWx8ZW58MHx8fHwxNzg5ODU0MTAyfDA&ixlib=rb-4.1.0&q=75&w=1600";
 const BENTO_OVERSIZED = "https://images.pexels.com/photos/32819862/pexels-photo-32819862.jpeg?auto=compress&cs=tinysrgb&w=1200";
 const BENTO_REGULAR = "https://images.pexels.com/photos/35515095/pexels-photo-35515095.jpeg?auto=compress&cs=tinysrgb&w=800";
-const BENTO_CAPS = "https://images.unsplash.com/photo-1532332248682-206cc786359f?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NDQ2Mzl8MHwxfHNlYXJjaHszfHxzdHJlZXR3ZWFyJTIwYmFzZWJhbGwlMjBjYXAlMjBiZWFuaWUlMjBoYXQlMjBmYXNoaW9uJTIwbW9kZWx8ZW58MHx8fHwxNzg5ODU0MTA4fDA&ixlib=rb-4.1.0&q=85";
+const BENTO_CAPS = "https://images.unsplash.com/photo-1532332248682-206cc786359f?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NDQ2Mzl8MHwxfHNlYXJjaHszfHxzdHJlZXR3ZWFyJTIwYmFzZWJhbGwlMjBjYXAlMjBiZWFuaWUlMjBoYXQlMjBmYXNoaW9uJTIwbW9kZWx8ZW58MHx8fHwxNzg5ODU0MTA4fDA&ixlib=rb-4.1.0&q=75&w=1600";
 
 function Hero() {
   const ref = useRef(null);
@@ -43,42 +43,19 @@ function Hero() {
       </motion.div>
 
       <motion.div style={{ opacity: fade }} className="relative z-10 h-full max-w-[1536px] mx-auto px-4 sm:px-8 lg:px-12 flex flex-col justify-end pb-16 sm:pb-20">
-        <motion.p
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.15, duration: 0.8 }}
-          className="font-mono text-[10px] sm:text-xs tracking-[0.35em] text-acid mb-5"
+        <motion.div
+          initial={{ opacity: 0, y: 16 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.9, duration: 0.7 }}
+          className="flex flex-wrap gap-3 sm:justify-end"
         >
-          VOL.04 // ACID CULTURE DROP — SS26
-        </motion.p>
-        <h1 className="font-display text-white leading-[0.82] text-[24vw] sm:text-[19vw] lg:text-[15rem]">
-          <MaskedLine delay={0.25}>WEAR THE</MaskedLine>
-          <MaskedLine delay={0.42}><span className="text-acid">NOISE.</span></MaskedLine>
-        </h1>
-        <div className="mt-8 flex flex-col sm:flex-row sm:items-end justify-between gap-8">
-          <motion.p
-            initial={{ opacity: 0, y: 16 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.75, duration: 0.7 }}
-            className="text-zinc-300 max-w-sm text-sm sm:text-base leading-relaxed"
-          >
-            Heavyweight 280 GSM tees, boxy silhouettes, caps built for the front row.
-            Limited runs. Zero restocks.
-          </motion.p>
-          <motion.div
-            initial={{ opacity: 0, y: 16 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.9, duration: 0.7 }}
-            className="flex flex-wrap gap-3"
-          >
-            <Link data-testid="hero-shop-cta" to="/shop" className="group inline-flex items-center gap-3 bg-acid text-black font-syne font-bold text-sm tracking-wide px-8 py-4 hover:bg-white transition-colors duration-200">
-              SHOP NEW DROPS <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
-            </Link>
-            <Link data-testid="hero-oversized-cta" to="/shop?category=oversized" className="inline-flex items-center gap-3 border border-white/60 text-white font-syne font-bold text-sm px-8 py-4 hover:bg-white hover:text-black transition-colors duration-200">
-              EXPLORE OVERSIZED
-            </Link>
-          </motion.div>
-        </div>
+          <Link data-testid="hero-shop-cta" to="/shop" className="group inline-flex items-center gap-3 bg-acid text-black font-syne font-bold text-sm tracking-wide px-8 py-4 hover:bg-white transition-colors duration-200">
+            SHOP NEW DROPS <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
+          </Link>
+          <Link data-testid="hero-oversized-cta" to="/shop?category=oversized" className="inline-flex items-center gap-3 border border-white/60 text-white font-syne font-bold text-sm px-8 py-4 hover:bg-white hover:text-black transition-colors duration-200">
+            EXPLORE OVERSIZED
+          </Link>
+        </motion.div>
       </motion.div>
     </section>
   );
