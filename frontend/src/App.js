@@ -46,7 +46,7 @@ export default function App() {
             },
           }}
         />
-        <div className="min-h-screen bg-ink text-white">
+        <div className="min-h-screen bg-white text-ink">
           <Navbar />
           <CartDrawer />
           <WishlistDrawer />

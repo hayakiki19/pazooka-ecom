@@ -6,10 +6,10 @@ const TAG_STYLES = {
   "NEW DROP": "bg-acid text-black",
   NEW: "bg-acid text-black",
   LIMITED: "bg-[#EE2643] text-white",
-  BESTSELLER: "bg-white text-black",
+  BESTSELLER: "bg-black text-acid",
   HOT: "bg-[#FF3B30] text-white",
-  POPULAR: "bg-zinc-800 text-white border border-zinc-600",
-  CORE: "bg-zinc-800 text-zinc-300",
+  POPULAR: "bg-white text-black border border-black",
+  CORE: "bg-zinc-200 text-black",
 };
 
 export default function ProductCard({ product }) {
@@ -20,7 +20,7 @@ export default function ProductCard({ product }) {
     <Link
       to={`/product/${product.id}`}
       data-testid={`product-card-${product.id}`}
-      className="group block border border-zinc-800 bg-ink hover:border-zinc-500 transition-colors duration-300 relative"
+      className="group block border border-zinc-200 bg-white hover:border-black transition-colors duration-300 relative"
     >
       <div className="relative aspect-[3/4] overflow-hidden bg-[#111]">
         <img
@@ -43,7 +43,7 @@ export default function ProductCard({ product }) {
             data-testid={`wishlist-toggle-${product.id}`}
             aria-label="Toggle wishlist"
             onClick={(e) => { e.preventDefault(); toggleWishlist(product); }}
-            className={`w-9 h-9 flex items-center justify-center border transition-colors ${wish ? "bg-acid border-acid text-black" : "bg-black/85 border-zinc-700 text-white hover:border-acid"}`}
+            className={`w-9 h-9 flex items-center justify-center border transition-colors ${wish ? "bg-acid border-acid text-black" : "bg-white/95 border-zinc-200 text-black hover:border-black"}`}
           >
             <Heart size={15} fill={wish ? "currentColor" : "none"} />
           </button>
@@ -51,7 +51,7 @@ export default function ProductCard({ product }) {
             data-testid={`quick-view-${product.id}`}
             aria-label="Quick view"
             onClick={(e) => { e.preventDefault(); setQuickView(product); }}
-            className="w-9 h-9 flex items-center justify-center bg-black/85 border border-zinc-700 text-white hover:border-acid transition-colors"
+            className="w-9 h-9 flex items-center justify-center bg-white/95 border border-zinc-200 text-black hover:border-black transition-colors"
           >
             <Eye size={15} />
           </button>

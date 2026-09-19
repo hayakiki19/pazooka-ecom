@@ -136,7 +136,7 @@ export default function Home() {
             <Reveal delay={0.05}><h2 className="font-display text-6xl sm:text-7xl lg:text-8xl leading-[0.85]">NEW DROPS</h2></Reveal>
           </div>
           <Reveal delay={0.1}>
-            <Link to="/shop" data-testid="view-all-link" className="hidden sm:inline-flex items-center gap-2 font-mono text-xs font-bold tracking-[0.2em] text-white border-b-2 border-white pb-1 hover:text-acid hover:border-acid transition-colors">
+            <Link to="/shop" data-testid="view-all-link" className="hidden sm:inline-flex items-center gap-2 font-mono text-xs font-bold tracking-[0.2em] border-b-2 border-black pb-1 hover:text-zinc-500 hover:border-zinc-400 transition-colors">
               VIEW ALL 21 <ArrowUpRight size={14} />
             </Link>
           </Reveal>
