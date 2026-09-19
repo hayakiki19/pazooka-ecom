@@ -70,7 +70,7 @@ export default function Footer() {
         </div>
 
         <div className="py-10 overflow-hidden select-none pointer-events-none" aria-hidden="true">
-          <p className="font-display text-stroke-white text-[18vw] leading-[0.8] text-center whitespace-nowrap">PAZOOKA</p>
+          <p className="font-display text-[#1A1A1C] text-[18vw] leading-[0.8] text-center whitespace-nowrap">PAZOOKA</p>
         </div>
 
         <div className="flex flex-col sm:flex-row items-center justify-between gap-3 py-6 border-t border-zinc-800 font-mono text-[10px] tracking-[0.25em] text-zinc-500">

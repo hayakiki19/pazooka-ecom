@@ -136,7 +136,7 @@ export default function Home() {
             <Reveal delay={0.05}><h2 className="font-display text-6xl sm:text-7xl lg:text-8xl leading-[0.85]">NEW DROPS</h2></Reveal>
           </div>
           <Reveal delay={0.1}>
-            <Link to="/shop" data-testid="view-all-link" className="hidden sm:inline-flex items-center gap-2 font-mono text-xs font-bold tracking-[0.2em] border-b-2 border-black pb-1 hover:text-zinc-500 hover:border-zinc-400 transition-colors">
+            <Link to="/shop" data-testid="view-all-link" className="hidden sm:inline-flex items-center gap-2 font-mono text-xs font-bold tracking-[0.2em] text-white border-b-2 border-white pb-1 hover:text-acid hover:border-acid transition-colors">
               VIEW ALL 21 <ArrowUpRight size={14} />
             </Link>
           </Reveal>
@@ -219,14 +219,14 @@ export default function Home() {
           <Reveal><p className="font-mono text-[10px] sm:text-xs tracking-[0.35em] text-acid mb-5">THE MANIFESTO</p></Reveal>
           <Reveal delay={0.08}>
             <h2 className="font-display leading-[0.85] text-6xl sm:text-8xl lg:text-9xl max-w-5xl">
-              NO RULES.<br />NO COMPROMISE.<br /><span className="text-stroke-white">PURE STREET CULTURE.</span>
+              NO RULES.<br />NO COMPROMISE.<br /><span className="text-zinc-700">PURE STREET CULTURE.</span>
             </h2>
           </Reveal>
           <div className="grid md:grid-cols-3 gap-px bg-zinc-800 border border-zinc-800 mt-16">
             {CHAPTERS.map((c, i) => (
               <Reveal key={c.n} delay={i * 0.1} className="bg-ink">
-                <div className="p-8 sm:p-10 h-full">
-                  <span className="font-mono text-acid text-sm font-bold">{c.n}</span>
+                <div className="p-8 sm:p-10 h-full border-l-2 border-zinc-800">
+                  <span className="font-syne font-extrabold text-3xl text-[#EE2643]">{c.n}</span>
                   <h3 className="font-syne font-extrabold text-xl sm:text-2xl uppercase mt-4">{c.t}</h3>
                   <p className="text-zinc-400 text-sm leading-relaxed mt-3">{c.d}</p>
                 </div>

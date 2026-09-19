@@ -47,14 +47,14 @@ export default function Navbar() {
   return (
     <header className="sticky top-0 z-50">
       <PromoBar />
-      <nav className="bg-white/90 backdrop-blur-md border-b border-zinc-200" data-testid="navbar">
+      <nav className="bg-ink/90 backdrop-blur-md border-b border-zinc-800" data-testid="navbar">
         <div className="max-w-[1536px] mx-auto px-4 sm:px-8 lg:px-12 h-16 flex items-center justify-between gap-6">
           <div className="flex items-center gap-4">
             <button
               data-testid="mobile-menu-btn"
               aria-label="Open menu"
               onClick={() => setMobileOpen(true)}
-              className="lg:hidden w-10 h-10 flex items-center justify-center border border-zinc-300 hover:border-black transition-colors"
+              className="lg:hidden w-10 h-10 flex items-center justify-center border border-zinc-700 hover:border-acid hover:text-acid transition-colors"
             >
               <Menu size={18} />
             </button>
@@ -69,7 +69,7 @@ export default function Navbar() {
                 <Link
                   to={l.to}
                   data-testid={`nav-${l.label.toLowerCase().replace(/\s+/g, "-")}`}
-                  className="font-syne font-bold text-[13px] tracking-wide hover:text-zinc-500 transition-colors flex items-center gap-1 py-6"
+                  className="font-syne font-bold text-[13px] tracking-wide text-white hover:text-acid transition-colors flex items-center gap-1 py-6"
                 >
                   {l.label}
                 </Link>
@@ -87,7 +87,7 @@ export default function Navbar() {
               data-testid="wishlist-drawer-trigger"
               aria-label="Open wishlist"
               onClick={() => setWishOpen(true)}
-              className="relative w-10 h-10 flex items-center justify-center border border-zinc-300 hover:border-black transition-colors"
+              className="relative w-10 h-10 flex items-center justify-center border border-zinc-700 hover:border-acid hover:text-acid transition-colors"
             >
               <Heart size={17} />
               {wishlist.length > 0 && (
@@ -100,7 +100,7 @@ export default function Navbar() {
               data-testid="cart-drawer-trigger"
               aria-label="Open cart"
               onClick={() => setCartOpen(true)}
-              className="relative w-10 h-10 flex items-center justify-center bg-black text-white hover:bg-acid hover:text-black transition-colors"
+              className="relative w-10 h-10 flex items-center justify-center bg-black text-white border border-zinc-700 hover:bg-acid hover:text-black hover:border-acid transition-colors"
             >
               <ShoppingBag size={17} />
               {cartCount > 0 && (
@@ -122,7 +122,7 @@ export default function Navbar() {
               transition={{ duration: 0.25, ease: "easeOut" }}
               onMouseEnter={() => setMegaOpen(true)}
               onMouseLeave={() => setMegaOpen(false)}
-              className="hidden lg:block absolute left-0 right-0 top-full bg-white border-b-2 border-black shadow-[0_24px_48px_rgba(0,0,0,0.12)]"
+              className="hidden lg:block absolute left-0 right-0 top-full bg-ink border-b-2 border-zinc-800 shadow-[0_24px_48px_rgba(0,0,0,0.6)]"
             >
               <div className="max-w-[1536px] mx-auto px-12 py-10 grid grid-cols-12 gap-10">
                 <div className="col-span-3">
@@ -130,7 +130,7 @@ export default function Navbar() {
                   <ul className="space-y-3">
                     {MEGA_FIT.map((l) => (
                       <li key={l.label}>
-                        <Link to={l.to} onClick={() => setMegaOpen(false)} data-testid={`mega-${l.label.toLowerCase().replace(/\s+/g, "-")}`} className="group flex items-baseline gap-2 font-syne font-bold text-lg uppercase hover:translate-x-1 transition-transform">
+                        <Link to={l.to} onClick={() => setMegaOpen(false)} data-testid={`mega-${l.label.toLowerCase().replace(/\s+/g, "-")}`} className="group flex items-baseline gap-2 font-syne font-bold text-lg uppercase text-white hover:text-acid hover:translate-x-1 transition-all">
                           {l.label}
                           <span className="font-mono text-[10px] text-zinc-400">{l.count}</span>
                         </Link>
@@ -143,14 +143,14 @@ export default function Navbar() {
                   <ul className="space-y-3">
                     {MEGA_VIBE.map((l) => (
                       <li key={l.label}>
-                        <Link to={l.to} onClick={() => setMegaOpen(false)} className="group flex items-center gap-2 font-syne font-bold text-lg uppercase hover:translate-x-1 transition-transform">
+                        <Link to={l.to} onClick={() => setMegaOpen(false)} className="group flex items-center gap-2 font-syne font-bold text-lg uppercase text-white hover:text-acid hover:translate-x-1 transition-all">
                           {l.label}
                           <ArrowUpRight size={14} className="opacity-0 group-hover:opacity-100 transition-opacity" />
                         </Link>
                       </li>
                     ))}
                   </ul>
-                  <div className="mt-8 bg-ink text-acid font-mono text-[10px] font-bold tracking-[0.2em] px-4 py-3">
+                  <div className="mt-8 bg-acid text-black font-mono text-[10px] font-bold tracking-[0.2em] px-4 py-3">
                     CODE PAZOOKA10 — 10% OFF FIRST DROP
                   </div>
                 </div>

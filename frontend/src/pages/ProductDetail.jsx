@@ -47,9 +47,9 @@ export default function ProductDetail() {
   if (notFound) {
     return (
       <div className="py-32 text-center" data-testid="product-not-found">
-        <p className="font-display text-7xl text-zinc-200">LOST IN THE STATIC.</p>
+        <p className="font-display text-7xl text-zinc-800">LOST IN THE STATIC.</p>
         <p className="font-mono text-xs tracking-widest text-zinc-500 mt-4">THIS PIECE DOESN'T EXIST (ANYMORE).</p>
-        <Link to="/shop" className="mt-8 inline-block bg-black text-white font-syne font-bold text-sm px-8 py-4 hover:bg-acid hover:text-black transition-colors">
+        <Link to="/shop" className="mt-8 inline-block bg-acid text-black font-syne font-bold text-sm px-8 py-4 hover:bg-white transition-colors">
           BACK TO THE DROP
         </Link>
       </div>
@@ -59,11 +59,11 @@ export default function ProductDetail() {
   if (!product) {
     return (
       <div className="max-w-[1536px] mx-auto px-4 sm:px-8 lg:px-12 py-12 grid lg:grid-cols-2 gap-10">
-        <div className="aspect-[3/4] bg-zinc-100 animate-pulse" />
+        <div className="aspect-[3/4] bg-zinc-900 animate-pulse" />
         <div className="space-y-4 pt-4">
-          <div className="h-4 w-24 bg-zinc-100 animate-pulse" />
-          <div className="h-12 w-3/4 bg-zinc-100 animate-pulse" />
-          <div className="h-6 w-32 bg-zinc-100 animate-pulse" />
+          <div className="h-4 w-24 bg-zinc-900 animate-pulse" />
+          <div className="h-12 w-3/4 bg-zinc-900 animate-pulse" />
+          <div className="h-6 w-32 bg-zinc-900 animate-pulse" />
         </div>
       </div>
     );
@@ -83,12 +83,12 @@ export default function ProductDetail() {
     <div data-testid="product-page">
       <div className="max-w-[1536px] mx-auto px-4 sm:px-8 lg:px-12 py-8 sm:py-12">
         <p className="font-mono text-[10px] tracking-[0.25em] text-zinc-500 mb-8">
-          <Link to="/" className="hover:text-black">HOME</Link> / <Link to="/shop" className="hover:text-black">SHOP</Link> / <Link to={`/shop?category=${product.category}`} className="hover:text-black">{product.category.toUpperCase()}</Link> / <span className="text-black">{product.id.toUpperCase()}</span>
+          <Link to="/" className="hover:text-white">HOME</Link> / <Link to="/shop" className="hover:text-white">SHOP</Link> / <Link to={`/shop?category=${product.category}`} className="hover:text-white">{product.category.toUpperCase()}</Link> / <span className="text-white">{product.id.toUpperCase()}</span>
         </p>
 
         <div className="grid lg:grid-cols-2 gap-8 lg:gap-14">
           <div>
-            <div className="relative aspect-[3/4] bg-zinc-100 overflow-hidden border border-zinc-200">
+            <div className="relative aspect-[3/4] bg-[#111] overflow-hidden border border-zinc-800">
               <AnimatePresence mode="wait">
                 <motion.img
                   key={imgIdx}
@@ -109,7 +109,7 @@ export default function ProductDetail() {
                   key={i}
                   data-testid={`thumb-${i}`}
                   onClick={() => setImgIdx(i)}
-                  className={`relative w-20 aspect-[3/4] overflow-hidden border-2 transition-colors ${imgIdx === i ? "border-black" : "border-transparent hover:border-zinc-400"}`}
+                  className={`relative w-20 aspect-[3/4] overflow-hidden border-2 transition-colors ${imgIdx === i ? "border-acid" : "border-transparent hover:border-zinc-600"}`}
                 >
                   <img src={img} alt="" className="absolute inset-0 h-full w-full object-cover" />
                 </button>
@@ -133,7 +133,7 @@ export default function ProductDetail() {
                 </>
               )}
             </div>
-            <p className="text-zinc-600 text-sm leading-relaxed mt-6 max-w-md">{product.description}</p>
+            <p className="text-zinc-400 text-sm leading-relaxed mt-6 max-w-md">{product.description}</p>
 
             <div className="mt-8">
               <div className="flex items-center justify-between mb-2.5">
@@ -152,9 +152,9 @@ export default function ProductDetail() {
                     exit={{ height: 0, opacity: 0 }}
                     className="overflow-hidden"
                   >
-                    <table className="w-full font-mono text-[11px] mb-4 border border-zinc-200" data-testid="size-guide-table">
+                    <table className="w-full font-mono text-[11px] mb-4 border border-zinc-800 text-zinc-300" data-testid="size-guide-table">
                       <thead>
-                        <tr className="bg-zinc-50">
+                        <tr className="bg-zinc-900">
                           <th className="text-left px-3 py-2 font-bold">SIZE</th>
                           <th className="text-left px-3 py-2 font-bold">CHEST</th>
                           <th className="text-left px-3 py-2 font-bold">LENGTH</th>
@@ -162,7 +162,7 @@ export default function ProductDetail() {
                       </thead>
                       <tbody>
                         {SIZE_GUIDE.map((r) => (
-                          <tr key={r.s} className="border-t border-zinc-200">
+                          <tr key={r.s} className="border-t border-zinc-800">
                             <td className="px-3 py-2 font-bold">{r.s}</td>
                             <td className="px-3 py-2">{r.chest}</td>
                             <td className="px-3 py-2">{r.length}</td>
@@ -179,7 +179,7 @@ export default function ProductDetail() {
                     key={s}
                     data-testid={`size-btn-${s.toLowerCase()}`}
                     onClick={() => setSize(s)}
-                    className={`min-w-12 h-12 px-3 border font-mono text-sm transition-all ${size === s ? "bg-black text-white border-black shadow-[3px_3px_0px_0px_#D4FF00]" : "border-zinc-300 hover:border-black"}`}
+                    className={`min-w-12 h-12 px-3 border font-mono text-sm transition-all ${size === s ? "bg-white text-black border-white shadow-[3px_3px_0px_0px_#D4FF00]" : "border-zinc-700 text-zinc-300 hover:border-white"}`}
                   >
                     {s}
                   </button>
@@ -188,15 +188,15 @@ export default function ProductDetail() {
             </div>
 
             <div className="flex gap-2 mt-6">
-              <div className="flex items-center border border-zinc-300">
-                <button data-testid="qty-minus" aria-label="Decrease quantity" onClick={() => setQty(Math.max(1, qty - 1))} className="w-12 h-12 flex items-center justify-center hover:bg-zinc-100"><Minus size={14} /></button>
+              <div className="flex items-center border border-zinc-700">
+                <button data-testid="qty-minus" aria-label="Decrease quantity" onClick={() => setQty(Math.max(1, qty - 1))} className="w-12 h-12 flex items-center justify-center hover:bg-zinc-900"><Minus size={14} /></button>
                 <span className="w-10 text-center font-mono text-sm font-bold" data-testid="qty-value">{qty}</span>
-                <button data-testid="qty-plus" aria-label="Increase quantity" onClick={() => setQty(Math.min(10, qty + 1))} className="w-12 h-12 flex items-center justify-center hover:bg-zinc-100"><Plus size={14} /></button>
+                <button data-testid="qty-plus" aria-label="Increase quantity" onClick={() => setQty(Math.min(10, qty + 1))} className="w-12 h-12 flex items-center justify-center hover:bg-zinc-900"><Plus size={14} /></button>
               </div>
               <button
                 data-testid="add-to-cart-btn"
                 onClick={handleAdd}
-                className="flex-1 bg-black text-white font-syne font-bold text-sm tracking-wide hover:bg-acid hover:text-black transition-colors"
+                className="flex-1 bg-acid text-black font-syne font-bold text-sm tracking-wide hover:bg-white transition-colors"
               >
                 ADD TO CART — ${(product.price * qty).toFixed(0)}
               </button>
@@ -204,21 +204,21 @@ export default function ProductDetail() {
                 data-testid="wishlist-toggle"
                 aria-label="Toggle wishlist"
                 onClick={() => toggleWishlist(product)}
-                className={`w-12 h-12 flex items-center justify-center border-2 transition-colors ${wish ? "bg-acid border-acid text-black" : "border-black hover:bg-black hover:text-white"}`}
+                className={`w-12 h-12 flex items-center justify-center border-2 transition-colors ${wish ? "bg-acid border-acid text-black" : "border-zinc-500 hover:border-acid hover:text-acid"}`}
               >
                 <Heart size={17} fill={wish ? "currentColor" : "none"} />
               </button>
             </div>
 
-            <div className="grid grid-cols-3 gap-px bg-zinc-200 border border-zinc-200 mt-8">
+            <div className="grid grid-cols-3 gap-px bg-zinc-800 border border-zinc-800 mt-8">
               {[
                 { icon: Truck, t: "FREE SHIPPING $75+" },
                 { icon: RotateCcw, t: "30-DAY RETURNS" },
                 { icon: Zap, t: "SHIPS IN 48H" },
               ].map((f) => (
-                <div key={f.t} className="bg-white px-3 py-4 flex flex-col items-center gap-2 text-center">
+                <div key={f.t} className="bg-ink px-3 py-4 flex flex-col items-center gap-2 text-center">
                   <f.icon size={16} />
-                  <span className="font-mono text-[9px] tracking-[0.15em] text-zinc-600">{f.t}</span>
+                  <span className="font-mono text-[9px] tracking-[0.15em] text-zinc-400">{f.t}</span>
                 </div>
               ))}
             </div>

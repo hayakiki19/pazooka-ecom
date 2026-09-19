@@ -13,7 +13,7 @@ Build a website inspired by bonkerscorner.com and wtflex.in — a premium Gen-Z 
 - Backend: FastAPI, routes under /api
 - DB: MongoDB (motor) via MONGO_URL/DB_NAME env
 - Fonts: Bebas Neue (display), Syne (subheads), Outfit (body), Space Mono (labels)
-- Colors: white #FFFFFF / ink #0A0A0A / acid lime #D4FF00 / sale red #FF3B30
+- Colors: black #0A0A0A base / white type / dim zinc-700 giant words / acid lime #D4FF00 labels+CTAs / crimson #EE2643 manifesto numbers + LIMITED tags — full dark scheme applied site-wide (home, shop, product, checkout, drawers, mega menu, footer)
 
 ## Core Requirements (static)
 - 21-product seeded catalog (10 oversized, 6 regular, 5 caps), real photography, hover image swap
