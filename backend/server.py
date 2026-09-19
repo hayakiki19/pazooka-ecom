@@ -105,8 +105,12 @@ PRODUCTS = [
       U + "photo-1635650804483-2a77a8c9e728?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NDQ2Mzl8MHwxfHNlYXJjaHxfHxzdHJlZXR3ZWFyJTIwYmFzZWJhbGwlMjBjYXAlMjBiZWFuaWUlMjBoYXQlMjBmYXNoaW9uJTIwbW9kZWx8ZW58MHx8fHwxNzg5ODU0MTA4fDA&ixlib=rb-4.1.0&q=75&w=800"),
 ]
 
+PRODUCTS_DIR = Path("/app/frontend/public/products")
+
 for i, p in enumerate(PRODUCTS):
     p["drop_index"] = i + (50 if p["tag"] == "NEW DROP" else 0)
+    if (PRODUCTS_DIR / f"{p['id']}.png").exists():
+        p["images"] = [f"/products/{p['id']}.png", f"/products/{p['id']}.png"]
 
 
 @api_router.get("/")

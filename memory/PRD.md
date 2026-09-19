@@ -27,6 +27,8 @@ Build a website inspired by bonkerscorner.com and wtflex.in — a premium Gen-Z 
 - Backend: GET /api/products (category/q/sort/tag filters), GET /api/products/{id}, POST /api/orders (server-side pricing, promo validation, free shipping ≥$75), idempotent product seed on startup
 - Frontend: all pages and components above; data-testids throughout
 - Verified: all API endpoints via curl; e2e flows via screenshots (quick add, cart, product detail, checkout, order confirmation, mobile menu)
+- Hero simplified (image + badge + CTAs only); all catalog/banner imagery downscaled for performance
+- AI studio product photography (Gemini Nano Banana): 14/21 products have ghost-mannequin studio shots on consistent grey spotlight backdrops, served from /app/frontend/public/products/. PENDING 7 (paz-10, paz-16..paz-21 incl. all 5 caps) — Emergent universal key budget exhausted mid-batch; rerun `python /app/backend/retry_images.py` after top-up, then restart backend to re-seed
 
 ## Backlog / Next Tasks
 - P1: Real payment (Stripe test mode)
