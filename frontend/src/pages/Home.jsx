@@ -28,6 +28,47 @@ const BENTO_OVERSIZED = "https://images.pexels.com/photos/32819862/pexels-photo-
 const BENTO_REGULAR = "https://images.pexels.com/photos/35515095/pexels-photo-35515095.jpeg?auto=compress&cs=tinysrgb&w=800";
 const BENTO_CAPS = "https://images.unsplash.com/photo-1532332248682-206cc786359f?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NDQ2Mzl8MHwxfHNlYXJjaHszfHxzdHJlZXR3ZWFyJTIwYmFzZWJhbGwlMjBjYXAlMjBiZWFuaWUlMjBoYXQlMjBmYXNoaW9uJTIwbW9kZWx8ZW58MHx8fHwxNzg5ODU0MTA4fDA&ixlib=rb-4.1.0&q=75&w=1600";
 
+const DROP_SLIDES = [
+  "https://images.unsplash.com/photo-1532332248682-206cc786359f?crop=entropy&cs=srgb&fm=jpg&ixlib=rb-4.1.0&q=75&w=1600",
+  "https://images.pexels.com/photos/35515095/pexels-photo-35515095.jpeg?auto=compress&cs=tinysrgb&w=1600&h=1000&fit=crop",
+  "https://images.unsplash.com/photo-1646197879190-78a962aab29b?crop=entropy&cs=srgb&fm=jpg&ixlib=rb-4.1.0&q=75&w=1600",
+];
+
+function DropBanner() {
+  const ref = useRef(null);
+  const { scrollYProgress } = useScroll({ target: ref, offset: ["start end", "end start"] });
+  const y = useTransform(scrollYProgress, [0, 1], ["-10%", "10%"]);
+
+  return (
+    <section ref={ref} data-testid="drop-banner" className="relative h-[100svh] min-h-[600px] overflow-hidden bg-ink">
+      <motion.div style={{ y }} className="absolute -inset-y-[12%] inset-x-0 will-change-transform">
+        <BannerSlider images={DROP_SLIDES} interval={4200} imgClassName="opacity-60" testId="drop" />
+      </motion.div>
+      <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-black/40 pointer-events-none" />
+      <div className="relative z-10 h-full max-w-[1536px] mx-auto px-4 sm:px-8 lg:px-12 flex flex-col items-center justify-center text-center">
+        <Reveal>
+          <p className="font-mono text-[10px] sm:text-xs tracking-[0.4em] text-acid mb-6">VOL.04 // ACID CULTURE</p>
+        </Reveal>
+        <Reveal delay={0.1}>
+          <h2 className="font-display text-white leading-[0.82] text-[18vw] sm:text-[14vw] lg:text-[11rem]">
+            THE DROP<br /><span className="text-acid">IS LIVE.</span>
+          </h2>
+        </Reveal>
+        <Reveal delay={0.2}>
+          <p className="text-zinc-300 max-w-md mt-7 text-sm sm:text-base leading-relaxed">
+            21 heavyweight pieces. 250 units each. When they're gone, they're gone forever.
+          </p>
+        </Reveal>
+        <Reveal delay={0.3}>
+          <Link to="/shop?tag=NEW DROP" data-testid="drop-banner-cta" className="group mt-9 inline-flex items-center gap-3 bg-acid text-black font-syne font-bold text-sm px-10 py-4 hover:bg-white transition-colors duration-200">
+            SHOP THE DROP <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
+          </Link>
+        </Reveal>
+      </div>
+    </section>
+  );
+}
+
 function Hero() {
   const ref = useRef(null);
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start start", "end start"] });
@@ -154,6 +195,8 @@ export default function Home() {
   return (
     <div data-testid="home-page">
       <Hero />
+
+      <DropBanner />
 
       <div className="bg-ink border-y border-zinc-800 py-4 sm:py-5 marquee-paused" data-testid="home-marquee">
         <Marquee
