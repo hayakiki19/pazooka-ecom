@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import { useShop } from "../context/ShopContext";
 
 export default function WishlistDrawer() {
-  const { wishlist, wishOpen, setWishOpen, toggleWishlist, addToCart, setCartOpen } = useShop();
+  const { wishlist, wishOpen, setWishOpen, toggleWishlist, addToCart, setCartOpen, formatPrice } = useShop();
 
   return (
     <AnimatePresence>
@@ -46,7 +46,7 @@ export default function WishlistDrawer() {
                   </Link>
                   <div className="flex-1 min-w-0 flex flex-col">
                     <p className="font-syne font-bold text-xs uppercase leading-tight">{item.name}</p>
-                    <span className="font-mono text-sm font-bold mt-1.5">${item.price}</span>
+                    <span className="font-mono text-sm font-bold mt-1.5">{formatPrice(item.price)}</span>
                     <button
                       data-testid={`wishlist-add-cart-${item.id}`}
                       onClick={() => { addToCart(item); setWishOpen(false); setCartOpen(true); }}

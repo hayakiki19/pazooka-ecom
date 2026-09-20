@@ -155,7 +155,19 @@ async def attach_ratings(products):
         p["rating"] = summary.get(p["id"], {"avg": 0, "count": 0})
     return products
 
+INR_PRICES = {
+    "paz-01": (1699, 2199), "paz-02": (1899, None), "paz-03": (1499, 1899),
+    "paz-04": (1799, None), "paz-05": (1599, 2099), "paz-06": (1699, None),
+    "paz-07": (1899, 2399), "paz-08": (1599, None), "paz-09": (1799, 2299),
+    "paz-10": (1399, 1699), "paz-11": (1199, 1499), "paz-12": (1199, None),
+    "paz-13": (1299, 1599), "paz-14": (1399, None), "paz-15": (1499, 1799),
+    "paz-16": (999, None), "paz-17": (899, 1199), "paz-18": (999, None),
+    "paz-19": (849, 999), "paz-20": (949, None), "paz-21": (799, 999),
+}
+
 for i, p in enumerate(PRODUCTS):
+    p["price"], p["original_price"] = INR_PRICES[p["id"]]
+    p["currency"] = "INR"
     p["drop_index"] = i + (50 if p["tag"] == "NEW DROP" else 0)
     if (PRODUCTS_DIR / f"{p['id']}.png").exists():
         p["images"] = [f"/products/{p['id']}.png", f"/products/{p['id']}.png"]
@@ -216,8 +228,8 @@ class OrderCreate(BaseModel):
 
 
 PROMO_CODES = {"PAZOOKA10": 0.10}
-FREE_SHIPPING_THRESHOLD = 75.0
-SHIPPING_FLAT = 6.0
+FREE_SHIPPING_THRESHOLD = 2999.0
+SHIPPING_FLAT = 99.0
 
 
 @api_router.post("/orders")

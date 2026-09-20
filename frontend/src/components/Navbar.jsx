@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import { AnimatePresence, motion } from "framer-motion";
 import { Heart, ShoppingBag, Menu, X, ArrowUpRight } from "lucide-react";
-import { useShop } from "../context/ShopContext";
+import { useShop, CURRENCIES } from "../context/ShopContext";
 import PromoBar from "./PromoBar";
 
 const NAV_LINKS = [
@@ -40,7 +40,7 @@ const MEGA_FEATURED = [
 ];
 
 export default function Navbar() {
-  const { cartCount, wishlist, setCartOpen, setWishOpen } = useShop();
+  const { cartCount, wishlist, setCartOpen, setWishOpen, currency, setCurrency } = useShop();
   const [megaOpen, setMegaOpen] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
 
@@ -83,6 +83,17 @@ export default function Navbar() {
           </ul>
 
           <div className="flex items-center gap-2 sm:gap-3">
+            <select
+              data-testid="currency-select"
+              aria-label="Select currency"
+              value={currency}
+              onChange={(e) => setCurrency(e.target.value)}
+              className="border border-zinc-300 focus:border-black px-2 h-10 font-mono text-[11px] font-bold tracking-widest bg-white focus:outline-none cursor-pointer"
+            >
+              {Object.keys(CURRENCIES).map((c) => (
+                <option key={c} value={c}>{c}</option>
+              ))}
+            </select>
             <button
               data-testid="wishlist-drawer-trigger"
               aria-label="Open wishlist"

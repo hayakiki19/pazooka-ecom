@@ -4,9 +4,9 @@ import { useNavigate } from "react-router-dom";
 import { useShop } from "../context/ShopContext";
 
 export default function CartDrawer() {
-  const { cart, cartOpen, setCartOpen, updateQty, removeFromCart, cartTotal, cartCount } = useShop();
+  const { cart, cartOpen, setCartOpen, updateQty, removeFromCart, cartTotal, cartCount, formatPrice } = useShop();
   const navigate = useNavigate();
-  const progress = Math.min(cartTotal / 75, 1);
+  const progress = Math.min(cartTotal / 2999, 1);
 
   return (
     <AnimatePresence>
@@ -37,7 +37,7 @@ export default function CartDrawer() {
 
             <div className="px-5 py-3 border-b border-zinc-200 bg-zinc-50">
               <p className="font-mono text-[10px] tracking-[0.2em] text-zinc-600 mb-2">
-                {cartTotal >= 75 ? "FREE SHIPPING UNLOCKED" : `$${(75 - cartTotal).toFixed(0)} AWAY FROM FREE SHIPPING`}
+                {cartTotal >= 2999 ? "FREE SHIPPING UNLOCKED" : `${formatPrice(2999 - cartTotal)} AWAY FROM FREE SHIPPING`}
               </p>
               <div className="h-1.5 bg-zinc-200 w-full">
                 <div className="h-full bg-acid transition-all duration-500" style={{ width: `${progress * 100}%` }} />
@@ -66,7 +66,7 @@ export default function CartDrawer() {
                         <span className="w-7 text-center font-mono text-xs">{item.qty}</span>
                         <button data-testid={`cart-plus-${item.key}`} aria-label="Increase" onClick={() => updateQty(item.key, 1)} className="w-7 h-7 flex items-center justify-center hover:bg-zinc-100"><Plus size={12} /></button>
                       </div>
-                      <span className="font-mono text-sm font-bold">${(item.price * item.qty).toFixed(0)}</span>
+                      <span className="font-mono text-sm font-bold">{formatPrice(item.price * item.qty)}</span>
                     </div>
                   </div>
                   <button data-testid={`cart-remove-${item.key}`} aria-label="Remove" onClick={() => removeFromCart(item.key)} className="self-start text-zinc-400 hover:text-[#FF3B30] transition-colors">
@@ -80,7 +80,7 @@ export default function CartDrawer() {
               <div className="border-t-2 border-black px-5 py-4 space-y-3">
                 <div className="flex justify-between font-mono text-sm">
                   <span className="tracking-widest text-zinc-500">SUBTOTAL</span>
-                  <span data-testid="cart-subtotal" className="font-bold">${cartTotal.toFixed(2)}</span>
+                  <span data-testid="cart-subtotal" className="font-bold">{formatPrice(cartTotal)}</span>
                 </div>
                 <button
                   data-testid="checkout-btn"

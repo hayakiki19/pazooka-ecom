@@ -10,7 +10,7 @@ const inputCls =
   "w-full border border-zinc-300 focus:border-black px-4 py-3.5 text-sm focus:outline-none transition-colors bg-white";
 
 export default function Checkout() {
-  const { cart, cartTotal, clearCart } = useShop();
+  const { cart, cartTotal, clearCart, formatPrice } = useShop();
   const [form, setForm] = useState({ name: "", email: "", phone: "", address: "", city: "", zip: "" });
   const [promo, setPromo] = useState("");
   const [appliedPromo, setAppliedPromo] = useState(null);
@@ -18,7 +18,7 @@ export default function Checkout() {
   const [order, setOrder] = useState(null);
 
   const discount = appliedPromo ? cartTotal * 0.1 : 0;
-  const shipping = cart.length === 0 || cartTotal - discount >= 75 ? 0 : 6;
+  const shipping = cart.length === 0 || cartTotal - discount >= 2999 ? 0 : 99;
   const total = Math.max(0, cartTotal - discount + shipping);
 
   const set = (k) => (e) => setForm({ ...form, [k]: e.target.value });
@@ -78,15 +78,15 @@ export default function Checkout() {
                   <p className="font-syne font-bold text-xs uppercase">{i.name}</p>
                   <p className="font-mono text-[10px] text-zinc-500 tracking-widest mt-0.5">SIZE {i.size} × {i.qty}</p>
                 </div>
-                <span className="font-mono text-sm font-bold">${i.line_total.toFixed(2)}</span>
+                <span className="font-mono text-sm font-bold">{formatPrice(i.line_total)}</span>
               </div>
             ))}
           </div>
           <div className="font-mono text-sm mt-6 space-y-1.5">
-            <div className="flex justify-between text-zinc-500"><span>SUBTOTAL</span><span>${order.subtotal.toFixed(2)}</span></div>
-            {order.discount > 0 && <div className="flex justify-between text-zinc-500"><span>DISCOUNT ({order.promo_code})</span><span>-${order.discount.toFixed(2)}</span></div>}
-            <div className="flex justify-between text-zinc-500"><span>SHIPPING</span><span>{order.shipping === 0 ? "FREE" : `$${order.shipping.toFixed(2)}`}</span></div>
-            <div className="flex justify-between font-bold text-lg pt-2 border-t border-zinc-200"><span>TOTAL</span><span data-testid="order-total">${order.total.toFixed(2)}</span></div>
+            <div className="flex justify-between text-zinc-500"><span>SUBTOTAL</span><span>{formatPrice(order.subtotal)}</span></div>
+            {order.discount > 0 && <div className="flex justify-between text-zinc-500"><span>DISCOUNT ({order.promo_code})</span><span>-{formatPrice(order.discount)}</span></div>}
+            <div className="flex justify-between text-zinc-500"><span>SHIPPING</span><span>{order.shipping === 0 ? "FREE" : formatPrice(order.shipping)}</span></div>
+            <div className="flex justify-between font-bold text-lg pt-2 border-t border-zinc-200"><span>TOTAL</span><span data-testid="order-total">{formatPrice(order.total)}</span></div>
           </div>
           <Link to="/shop" data-testid="continue-shopping-btn" className="group mt-10 inline-flex items-center gap-3 bg-acid text-black font-syne font-bold text-sm px-8 py-4 hover:bg-white transition-colors">
             CONTINUE SHOPPING <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
@@ -147,7 +147,7 @@ export default function Checkout() {
                     <p className="font-syne font-bold text-[11px] uppercase leading-tight truncate">{i.name}</p>
                     <p className="font-mono text-[9px] text-zinc-500 tracking-widest mt-0.5">{i.size} × {i.qty}</p>
                   </div>
-                  <span className="font-mono text-xs font-bold">${(i.price * i.qty).toFixed(0)}</span>
+                  <span className="font-mono text-xs font-bold">{formatPrice(i.price * i.qty)}</span>
                 </div>
               ))}
             </div>
@@ -166,10 +166,10 @@ export default function Checkout() {
             </div>
 
             <div className="font-mono text-xs mt-6 space-y-2">
-              <div className="flex justify-between text-zinc-500"><span>SUBTOTAL</span><span>${cartTotal.toFixed(2)}</span></div>
-              {appliedPromo && <div className="flex justify-between text-zinc-500"><span>PAZOOKA10 (-10%)</span><span>-${discount.toFixed(2)}</span></div>}
-              <div className="flex justify-between text-zinc-500"><span>SHIPPING</span><span>{shipping === 0 ? "FREE" : `$${shipping.toFixed(2)}`}</span></div>
-              <div className="flex justify-between font-bold text-base pt-3 border-t-2 border-black"><span>TOTAL</span><span data-testid="checkout-total">${total.toFixed(2)}</span></div>
+              <div className="flex justify-between text-zinc-500"><span>SUBTOTAL</span><span>{formatPrice(cartTotal)}</span></div>
+              {appliedPromo && <div className="flex justify-between text-zinc-500"><span>PAZOOKA10 (-10%)</span><span>-{formatPrice(discount)}</span></div>}
+              <div className="flex justify-between text-zinc-500"><span>SHIPPING</span><span>{shipping === 0 ? "FREE" : formatPrice(shipping)}</span></div>
+              <div className="flex justify-between font-bold text-base pt-3 border-t-2 border-black"><span>TOTAL</span><span data-testid="checkout-total">{formatPrice(total)}</span></div>
             </div>
 
             <button

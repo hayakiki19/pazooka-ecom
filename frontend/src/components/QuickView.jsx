@@ -6,7 +6,7 @@ import { toast } from "sonner";
 import { useShop } from "../context/ShopContext";
 
 export default function QuickView() {
-  const { quickView, setQuickView, addToCart, setCartOpen } = useShop();
+  const { quickView, setQuickView, addToCart, setCartOpen, formatPrice } = useShop();
   const [size, setSize] = useState(null);
 
   useEffect(() => {
@@ -53,8 +53,8 @@ export default function QuickView() {
               <p className="font-mono text-[10px] tracking-[0.25em] text-zinc-500 uppercase">{quickView.fit}{quickView.gsm ? ` // ${quickView.gsm}` : ""}</p>
               <h3 className="font-display text-3xl sm:text-4xl leading-none mt-2">{quickView.name}</h3>
               <div className="flex items-baseline gap-2 mt-3">
-                <span className="font-mono text-xl font-bold">${quickView.price}</span>
-                {quickView.original_price && <span className="font-mono text-sm text-zinc-400 line-through">${quickView.original_price}</span>}
+                <span className="font-mono text-xl font-bold">{formatPrice(quickView.price)}</span>
+                {quickView.original_price && <span className="font-mono text-sm text-zinc-400 line-through">{formatPrice(quickView.original_price)}</span>}
               </div>
               <p className="font-mono text-[10px] tracking-[0.25em] text-zinc-500 mt-6 mb-2">SIZE</p>
               <div className="flex gap-1.5 flex-wrap">

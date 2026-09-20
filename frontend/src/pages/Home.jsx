@@ -123,7 +123,7 @@ export default function Home() {
       <div className="bg-ink border-y border-zinc-800 py-4 sm:py-5 marquee-paused" data-testid="home-marquee">
         <Marquee
           duration={55}
-          items={["PAZOOKA STREETWEAR", "OVERSIZED FIT SPECIALISTS", "HEAVYWEIGHT 280 GSM COTTON", "NEW DROPS EVERY FRIDAY", "FREE WORLDWIDE SHIPPING $75+"]}
+          items={["PAZOOKA STREETWEAR", "OVERSIZED FIT SPECIALISTS", "HEAVYWEIGHT 280 GSM COTTON", "NEW DROPS EVERY FRIDAY", "FREE SHIPPING OVER ₹2,999"]}
           itemClassName="font-display text-2xl sm:text-4xl text-white tracking-wide pt-1"
           sepClassName="text-acid"
         />

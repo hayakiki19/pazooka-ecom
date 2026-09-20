@@ -12,20 +12,32 @@ const load = (key) => {
   }
 };
 
+export const CURRENCIES = {
+  INR: { symbol: "₹", rate: 1, locale: "en-IN" },
+  USD: { symbol: "$", rate: 0.0112, locale: "en-US" },
+  EUR: { symbol: "€", rate: 0.0104, locale: "de-DE" },
+  GBP: { symbol: "£", rate: 0.0089, locale: "en-GB" },
+};
+
 export function ShopProvider({ children }) {
-  const [cart, setCart] = useState(() => load("pazooka_cart"));
-  const [wishlist, setWishlist] = useState(() => load("pazooka_wishlist"));
+  const [cart, setCart] = useState(() => load("pazooka_cart_v2"));
+  const [wishlist, setWishlist] = useState(() => load("pazooka_wishlist_v2"));
   const [cartOpen, setCartOpen] = useState(false);
   const [wishOpen, setWishOpen] = useState(false);
   const [quickView, setQuickView] = useState(null);
+  const [currency, setCurrency] = useState(() => localStorage.getItem("pazooka_currency") || "INR");
 
   useEffect(() => {
-    localStorage.setItem("pazooka_cart", JSON.stringify(cart));
+    localStorage.setItem("pazooka_cart_v2", JSON.stringify(cart));
   }, [cart]);
 
   useEffect(() => {
-    localStorage.setItem("pazooka_wishlist", JSON.stringify(wishlist));
+    localStorage.setItem("pazooka_wishlist_v2", JSON.stringify(wishlist));
   }, [wishlist]);
+
+  useEffect(() => {
+    localStorage.setItem("pazooka_currency", currency);
+  }, [currency]);
 
   const addToCart = (product, size, qty = 1) => {
     const chosen = size || product.sizes[0];
@@ -88,9 +100,17 @@ export function ShopProvider({ children }) {
   const cartCount = useMemo(() => cart.reduce((a, i) => a + i.qty, 0), [cart]);
   const cartTotal = useMemo(() => cart.reduce((a, i) => a + i.price * i.qty, 0), [cart]);
 
+  const formatPrice = (inr) => {
+    const c = CURRENCIES[currency] || CURRENCIES.INR;
+    return `${c.symbol}${Math.round(inr * c.rate).toLocaleString(c.locale)}`;
+  };
+
   const value = {
     cart,
     wishlist,
+    currency,
+    setCurrency,
+    formatPrice,
     cartOpen,
     setCartOpen,
     wishOpen,

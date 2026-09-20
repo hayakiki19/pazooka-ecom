@@ -20,7 +20,7 @@ const SIZE_GUIDE = [
 
 export default function ProductDetail() {
   const { id } = useParams();
-  const { addToCart, toggleWishlist, isWishlisted, setCartOpen } = useShop();
+  const { addToCart, toggleWishlist, isWishlisted, setCartOpen, formatPrice } = useShop();
   const [product, setProduct] = useState(null);
   const [related, setRelated] = useState([]);
   const [size, setSize] = useState(null);
@@ -125,10 +125,10 @@ export default function ProductDetail() {
             </p>
             <h1 className="font-display text-5xl sm:text-6xl leading-[0.88] mt-3" data-testid="product-name">{product.name}</h1>
             <div className="flex items-baseline gap-3 mt-4">
-              <span className="font-mono text-2xl font-bold" data-testid="product-price">${product.price}</span>
+              <span className="font-mono text-2xl font-bold" data-testid="product-price">{formatPrice(product.price)}</span>
               {product.original_price && (
                 <>
-                  <span className="font-mono text-base text-zinc-400 line-through">${product.original_price}</span>
+                  <span className="font-mono text-base text-zinc-400 line-through">{formatPrice(product.original_price)}</span>
                   <span className="bg-acid font-mono text-[10px] font-bold px-2 py-0.5">
                     -{Math.round((1 - product.price / product.original_price) * 100)}%
                   </span>
@@ -210,7 +210,7 @@ export default function ProductDetail() {
                 onClick={handleAdd}
                 className="flex-1 bg-acid text-black font-syne font-bold text-sm tracking-wide hover:bg-white transition-colors"
               >
-                ADD TO CART — ${(product.price * qty).toFixed(0)}
+                ADD TO CART — {formatPrice(product.price * qty)}
               </button>
               <button
                 data-testid="wishlist-toggle"
@@ -224,7 +224,7 @@ export default function ProductDetail() {
 
             <div className="grid grid-cols-3 gap-px bg-zinc-200 border border-zinc-200 mt-8">
               {[
-                { icon: Truck, t: "FREE SHIPPING $75+" },
+                { icon: Truck, t: "FREE SHIPPING ₹2,999+" },
                 { icon: RotateCcw, t: "30-DAY RETURNS" },
                 { icon: Zap, t: "SHIPS IN 48H" },
               ].map((f) => (

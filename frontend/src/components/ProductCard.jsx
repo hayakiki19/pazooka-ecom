@@ -14,7 +14,7 @@ const TAG_STYLES = {
 };
 
 export default function ProductCard({ product }) {
-  const { addToCart, toggleWishlist, isWishlisted, setQuickView } = useShop();
+  const { addToCart, toggleWishlist, isWishlisted, setQuickView, formatPrice } = useShop();
   const wish = isWishlisted(product.id);
 
   return (
@@ -81,9 +81,9 @@ export default function ProductCard({ product }) {
           {product.name}
         </h3>
         <div className="flex items-baseline gap-2 mt-2">
-          <span className="font-mono text-base font-bold">${product.price}</span>
+          <span className="font-mono text-base font-bold">{formatPrice(product.price)}</span>
           {product.original_price && (
-            <span className="font-mono text-xs text-zinc-400 line-through">${product.original_price}</span>
+            <span className="font-mono text-xs text-zinc-400 line-through">{formatPrice(product.original_price)}</span>
           )}
         </div>
         {product.rating && product.rating.count > 0 && (
