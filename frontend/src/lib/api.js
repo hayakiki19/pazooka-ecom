@@ -10,4 +10,9 @@ export const fetchProducts = (params = {}) =>
 
 export const fetchProduct = (id) => axios.get(`${API}/products/${id}`).then((r) => r.data);
 
+export const fetchReviews = (id) => axios.get(`${API}/products/${id}/reviews`).then((r) => r.data);
+
+export const createReview = (id, payload) =>
+  axios.post(`${API}/products/${id}/reviews`, payload).then((r) => r.data);
+
 export const createOrder = (payload) => axios.post(`${API}/orders`, payload).then((r) => r.data);

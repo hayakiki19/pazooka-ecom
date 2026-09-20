@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { Heart, Eye } from "lucide-react";
 import { useShop } from "../context/ShopContext";
+import Stars from "./Stars";
 
 const TAG_STYLES = {
   "NEW DROP": "bg-acid text-black",
@@ -85,6 +86,12 @@ export default function ProductCard({ product }) {
             <span className="font-mono text-xs text-zinc-400 line-through">${product.original_price}</span>
           )}
         </div>
+        {product.rating && product.rating.count > 0 && (
+          <div className="flex items-center gap-1.5 mt-1.5" data-testid={`card-rating-${product.id}`}>
+            <Stars value={product.rating.avg} size={11} />
+            <span className="font-mono text-[10px] text-zinc-500">{product.rating.avg.toFixed(1)} ({product.rating.count})</span>
+          </div>
+        )}
       </div>
     </Link>
   );

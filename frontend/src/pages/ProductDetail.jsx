@@ -6,6 +6,8 @@ import { toast } from "sonner";
 import { fetchProduct, fetchProducts } from "../lib/api";
 import { useShop } from "../context/ShopContext";
 import ProductCard from "../components/ProductCard";
+import Stars from "../components/Stars";
+import Reviews from "../components/Reviews";
 import { Reveal } from "../components/motion";
 
 const SIZE_GUIDE = [
@@ -135,6 +137,16 @@ export default function ProductDetail() {
             </div>
             <p className="text-zinc-600 text-sm leading-relaxed mt-6 max-w-md">{product.description}</p>
 
+            {product.rating && product.rating.count > 0 && (
+              <a href="#reviews" data-testid="pdp-rating-link" className="flex items-center gap-2 mt-4 w-fit group">
+                <Stars value={product.rating.avg} size={14} />
+                <span className="font-mono text-xs font-bold">{product.rating.avg.toFixed(1)}</span>
+                <span className="font-mono text-[10px] tracking-[0.2em] text-zinc-500 group-hover:text-black transition-colors">
+                  // {product.rating.count} REVIEWS
+                </span>
+              </a>
+            )}
+
             <div className="mt-8">
               <div className="flex items-center justify-between mb-2.5">
                 <p className="font-mono text-[10px] tracking-[0.3em] text-zinc-500">SELECT SIZE</p>
@@ -225,6 +237,8 @@ export default function ProductDetail() {
           </div>
         </div>
       </div>
+
+      <Reviews productId={product.id} />
 
       {related.length > 0 && (
         <section className="max-w-[1536px] mx-auto px-4 sm:px-8 lg:px-12 py-14 sm:py-20" data-testid="related-section">

@@ -24,7 +24,8 @@ Build a website inspired by bonkerscorner.com and wtflex.in — a premium Gen-Z 
 - Demo checkout: form, promo code PAZOOKA10 (10%), server-computed totals, order confirmation
 
 ## Implemented (2026-09-19)
-- Backend: GET /api/products (category/q/sort/tag filters), GET /api/products/{id}, POST /api/orders (server-side pricing, promo validation, free shipping ≥$75), idempotent product seed on startup
+- Backend: GET /api/products (category/q/sort/tag filters, rating summary attached), GET /api/products/{id}, GET/POST /api/products/{id}/reviews (validated 1-5), POST /api/orders (server-side pricing, promo validation, free shipping ≥$75), idempotent product + review seeds on startup
+- Reviews: seeded 4-11 reviews per product (deterministic), stars + count on product cards, full reviews section on product pages (avg score card, verified-buyer list, write-a-review form)
 - Frontend: all pages and components above; data-testids throughout
 - Verified: all API endpoints via curl; e2e flows via screenshots (quick add, cart, product detail, checkout, order confirmation, mobile menu)
 - Hero simplified (image + badge + CTAs only); all catalog/banner imagery downscaled for performance

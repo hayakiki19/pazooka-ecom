@@ -5,10 +5,11 @@ from motor.motor_asyncio import AsyncIOMotorClient
 import os
 import logging
 import uuid
+import random
 from pathlib import Path
 from pydantic import BaseModel
 from typing import List, Optional
-from datetime import datetime, timezone
+from datetime import datetime, timezone, timedelta
 
 ROOT_DIR = Path(__file__).parent
 load_dotenv(ROOT_DIR / '.env')
@@ -107,6 +108,53 @@ PRODUCTS = [
 
 PRODUCTS_DIR = Path("/app/frontend/public/products")
 
+REVIEW_NAMES = [
+    "Aarav M", "Zara K", "Rohan D", "Maya S", "Kabir V", "Ishaan R",
+    "Anaya P", "Vihaan T", "Diya N", "Arjun B", "Sana F", "Reyansh G",
+]
+
+REVIEW_POOL = [
+    (5, "HEAVY AS PROMISED", "The fabric weight is unreal. Boxy drape sits exactly like the campaign shots. Two washes in, zero fade."),
+    (5, "INSTANT GRAIL", "Got stopped twice on the street asking where it's from. True to size for the oversized fit."),
+    (5, "WORTH EVERY CENT", "Stitching, print quality, the collar rib — everything feels premium. Already ordered a second colorway."),
+    (4, "NEARLY PERFECT", "Thick cotton and a clean print. Sleeves run slightly longer than expected but the drape is fire."),
+    (5, "BEST TEE I OWN", "280 GSM is no joke. It holds its shape all day and the graphic still looks brand new."),
+    (4, "SOLID COP", "Quality is way above the price point. Shipping took four days, otherwise flawless."),
+    (5, "CERTIFIED HEAT", "The graphic pops way harder in person. Fits boxy without looking like a tent."),
+    (3, "GOOD, NOT GREAT", "Fabric is excellent but the fit runs bigger than the size chart. Size down if between sizes."),
+    (5, "NO NOTES", "Perfect weight, perfect cut, perfect print. Third PAZOOKA drop and they never miss."),
+    (4, "DAILY DRIVER", "Wear it three times a week. Collar hasn't sagged at all, which never happens at this price."),
+    (5, "FITS LIKE ARMOR", "Structured but not stiff. The studio photos don't do the fabric justice."),
+    (4, "LOUD IN THE BEST WAY", "Print is crisp and the acid accents glow. Wish there were more colorways."),
+]
+
+
+def build_seed_reviews(pid):
+    rng = random.Random(f"pazooka-{pid}")
+    reviews = []
+    for _ in range(rng.randint(4, 11)):
+        rating, title, body = rng.choice(REVIEW_POOL)
+        reviews.append({
+            "product_id": pid,
+            "name": rng.choice(REVIEW_NAMES),
+            "rating": rating,
+            "title": title,
+            "comment": body,
+            "verified": rng.random() > 0.15,
+            "created_at": (datetime.now(timezone.utc) - timedelta(days=rng.randint(2, 120))).isoformat(),
+        })
+    return reviews
+
+
+async def attach_ratings(products):
+    summary = {}
+    pipeline = [{"$group": {"_id": "$product_id", "avg": {"$avg": "$rating"}, "count": {"$sum": 1}}}]
+    async for row in db.reviews.aggregate(pipeline):
+        summary[row["_id"]] = {"avg": round(row["avg"], 1), "count": row["count"]}
+    for p in products:
+        p["rating"] = summary.get(p["id"], {"avg": 0, "count": 0})
+    return products
+
 for i, p in enumerate(PRODUCTS):
     p["drop_index"] = i + (50 if p["tag"] == "NEW DROP" else 0)
     if (PRODUCTS_DIR / f"{p['id']}.png").exists():
@@ -135,7 +183,7 @@ async def list_products(category: Optional[str] = None, q: Optional[str] = None,
         cursor = cursor.sort(field, direction)
     else:
         cursor = cursor.sort("drop_index", -1)
-    return await cursor.to_list(100)
+    return await attach_ratings(await cursor.to_list(100))
 
 
 @api_router.get("/products/{product_id}")
@@ -143,7 +191,7 @@ async def get_product(product_id: str):
     doc = await db.products.find_one({"id": product_id}, {"_id": 0})
     if not doc:
         raise HTTPException(status_code=404, detail="Product not found")
-    return doc
+    return (await attach_ratings([doc]))[0]
 
 
 class OrderItemIn(BaseModel):
@@ -215,6 +263,42 @@ async def create_order(payload: OrderCreate):
     return order
 
 
+class ReviewCreate(BaseModel):
+    name: str
+    rating: int
+    title: Optional[str] = None
+    comment: str
+
+
+@api_router.get("/products/{product_id}/reviews")
+async def get_reviews(product_id: str):
+    docs = await db.reviews.find({"product_id": product_id}, {"_id": 0}).sort("created_at", -1).to_list(200)
+    avg = round(sum(d["rating"] for d in docs) / len(docs), 1) if docs else 0
+    return {"count": len(docs), "avg": avg, "reviews": docs}
+
+
+@api_router.post("/products/{product_id}/reviews", status_code=201)
+async def add_review(product_id: str, payload: ReviewCreate):
+    if not any(p["id"] == product_id for p in PRODUCTS):
+        raise HTTPException(status_code=404, detail="Product not found")
+    if not 1 <= payload.rating <= 5:
+        raise HTTPException(status_code=400, detail="Rating must be 1-5")
+    if not payload.name.strip() or not payload.comment.strip():
+        raise HTTPException(status_code=400, detail="Name and comment are required")
+    doc = {
+        "product_id": product_id,
+        "name": payload.name.strip()[:60],
+        "rating": payload.rating,
+        "title": (payload.title or "").strip()[:80],
+        "comment": payload.comment.strip()[:600],
+        "verified": False,
+        "created_at": datetime.now(timezone.utc).isoformat(),
+    }
+    await db.reviews.insert_one(doc)
+    doc.pop("_id", None)
+    return doc
+
+
 app.include_router(api_router)
 
 app.add_middleware(
@@ -234,6 +318,10 @@ async def seed_products():
     for p in PRODUCTS:
         await db.products.update_one({"id": p["id"]}, {"$set": p}, upsert=True)
     logger.info("Seeded %d PAZOOKA products", len(PRODUCTS))
+    for p in PRODUCTS:
+        if await db.reviews.count_documents({"product_id": p["id"]}) == 0:
+            await db.reviews.insert_many(build_seed_reviews(p["id"]))
+    logger.info("Review seed check complete")
 
 
 @app.on_event("shutdown")
