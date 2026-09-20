@@ -17,7 +17,11 @@ import Checkout from "@/pages/Checkout";
 function ScrollToTop() {
   const { pathname, search } = useLocation();
   useEffect(() => {
-    window.scrollTo({ top: 0, left: 0, behavior: "instant" });
+    if (window.__lenis) {
+      window.__lenis.scrollTo(0, { immediate: true });
+    } else {
+      window.scrollTo({ top: 0, left: 0, behavior: "instant" });
+    }
   }, [pathname, search]);
   return null;
 }
@@ -26,7 +30,11 @@ export default function App() {
   useEffect(() => {
     document.title = "PAZOOKA — Heavyweight Streetwear";
     const lenis = new Lenis({ autoRaf: true, lerp: 0.09 });
-    return () => lenis.destroy();
+    window.__lenis = lenis;
+    return () => {
+      lenis.destroy();
+      window.__lenis = null;
+    };
   }, []);
 
   return (
