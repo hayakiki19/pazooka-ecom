@@ -165,12 +165,26 @@ INR_PRICES = {
     "paz-19": (849, 999), "paz-20": (949, None), "paz-21": (799, 999),
 }
 
+U = "https://images.unsplash.com/"
+
+FALLBACK_IMAGES = {
+    "paz-10": U + "photo-1562157873-818bc0726f68?auto=format&fit=crop&w=800&q=75",
+    "paz-16": U + "photo-1620799140408-edc6dcb6d633?auto=format&fit=crop&w=800&q=75",
+    "paz-17": U + "photo-1521369909029-2afed882baee?auto=format&fit=crop&w=800&q=75",
+    "paz-18": U + "photo-1588850561407-ed78c282e89b?auto=format&fit=crop&w=800&q=75",
+    "paz-19": U + "photo-1521369909029-2afed882baee?auto=format&fit=crop&w=800&q=75&flip=h",
+    "paz-20": U + "photo-1521369909029-2afed882baee?auto=format&fit=crop&w=800&q=75&sat=-100",
+    "paz-21": U + "photo-1588850561407-ed78c282e89b?auto=format&fit=crop&w=800&q=75&sat=-60",
+}
+
 for i, p in enumerate(PRODUCTS):
     p["price"], p["original_price"] = INR_PRICES[p["id"]]
     p["currency"] = "INR"
     p["drop_index"] = i + (50 if p["tag"] == "NEW DROP" else 0)
     if (PRODUCTS_DIR / f"{p['id']}.png").exists():
         p["images"] = [f"/products/{p['id']}.png", f"/products/{p['id']}.png"]
+    elif p["id"] in FALLBACK_IMAGES:
+        p["images"] = [FALLBACK_IMAGES[p["id"]], FALLBACK_IMAGES[p["id"]]]
 
 
 @api_router.get("/")

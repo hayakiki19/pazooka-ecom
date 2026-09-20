@@ -20,10 +20,10 @@ TEE_STYLE = (
 )
 
 CAP_STYLE = (
-    "Professional e-commerce product photography. {desc}. The headwear sits centered on a rough grey "
-    "concrete block pedestal — no person, no model. Seamless warm light-grey studio backdrop with a soft "
-    "circular spotlight glow behind the product. Soft diffused studio lighting, subtle shadow, hyper-detailed "
-    "fabric texture, photorealistic, 3:4 portrait composition, no watermark, no extra text."
+    "Professional e-commerce product photography. {desc}. The headwear sits centered on top of a rough grey "
+    "brick cube pedestal — no person, no model, no mannequin head. Seamless warm light-grey studio backdrop "
+    "with a soft circular spotlight glow behind the product. Soft diffused studio lighting, subtle shadow, "
+    "hyper-detailed fabric texture, photorealistic, 3:4 portrait composition, no watermark, no extra text."
 )
 
 ITEMS = [

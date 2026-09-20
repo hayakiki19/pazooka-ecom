@@ -31,7 +31,7 @@ Build a website inspired by bonkerscorner.com and wtflex.in — a premium Gen-Z 
 - Frontend: all pages and components above; data-testids throughout
 - Verified: all API endpoints via curl; e2e flows via screenshots (quick add, cart, product detail, checkout, order confirmation, mobile menu)
 - Hero simplified (image + badge + CTAs only); all catalog/banner imagery downscaled for performance
-- AI studio product photography (Gemini Nano Banana): 14/21 products have ghost-mannequin studio shots on consistent grey spotlight backdrops, served from /app/frontend/public/products/. PENDING 7 (paz-10, paz-16..paz-21 incl. all 5 caps) — Emergent universal key budget exhausted mid-batch; rerun `python /app/backend/retry_images.py` after top-up, then restart backend to re-seed
+- AI studio product photography (Gemini Nano Banana): 14/21 products have ghost-mannequin studio shots on consistent grey spotlight backdrops, served from /app/frontend/public/products/. The other 7 (paz-10, paz-16..paz-21) use model-free stock flat-lay/product shots (NO model photos anywhere in catalog). PENDING: regenerate these 7 in studio style (caps on brick cube pedestal — prompt updated in generate_product_images.py) once universal key budget is topped up: run `python /app/backend/retry_images.py`, restart backend to re-seed
 
 ## Backlog / Next Tasks
 - P1: Real payment (Stripe test mode)
