@@ -39,7 +39,7 @@ export default function Footer() {
               </button>
             </form>
           </div>
-          <div className="grid grid-cols-2 sm:grid-cols-3 gap-8">
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-8">
             <div>
               <p className="font-mono text-[10px] tracking-[0.3em] text-zinc-500 mb-4">SHOP</p>
               <ul className="space-y-2.5 font-syne font-bold text-sm uppercase">
@@ -55,6 +55,15 @@ export default function Footer() {
                 <li><Link to="/shop?tag=NEW DROP" className="hover:text-acid transition-colors">New Drops</Link></li>
                 <li><Link to="/shop?tag=LIMITED" className="hover:text-acid transition-colors">Limited Runs</Link></li>
                 <li><Link to="/shop?tag=BESTSELLER" className="hover:text-acid transition-colors">Bestsellers</Link></li>
+              </ul>
+            </div>
+            <div>
+              <p className="font-mono text-[10px] tracking-[0.3em] text-zinc-500 mb-4">MORE</p>
+              <ul className="space-y-2.5 font-syne font-bold text-sm uppercase">
+                <li><Link to="/blog" data-testid="footer-blog" className="hover:text-acid transition-colors">Blog</Link></li>
+                <li><Link to="/faq" data-testid="footer-faq" className="hover:text-acid transition-colors">FAQ</Link></li>
+                <li><Link to="/account" className="hover:text-acid transition-colors">My Account</Link></li>
+                <li><Link to="/account" className="hover:text-acid transition-colors">Track Order</Link></li>
               </ul>
             </div>
             <div>

@@ -16,6 +16,9 @@ import Shop from "@/pages/Shop";
 import ProductDetail from "@/pages/ProductDetail";
 import Checkout from "@/pages/Checkout";
 import Account from "@/pages/Account";
+import Faq from "@/pages/Faq";
+import Blog from "@/pages/Blog";
+import BlogPost from "@/pages/BlogPost";
 import { exchangeSession } from "@/lib/api";
 
 function ScrollToTop() {
@@ -73,6 +76,9 @@ function AppRouter() {
       <Route path="/product/:id" element={<ProductDetail />} />
       <Route path="/checkout" element={<Checkout />} />
       <Route path="/account" element={<Account />} />
+      <Route path="/faq" element={<Faq />} />
+      <Route path="/blog" element={<Blog />} />
+      <Route path="/blog/:slug" element={<BlogPost />} />
       <Route path="*" element={<Home />} />
     </Routes>
   );
@@ -80,7 +86,6 @@ function AppRouter() {
 
 export default function App() {
   useEffect(() => {
-    document.title = "PAZOOKA — Heavyweight Streetwear";
     const lenis = new Lenis({ autoRaf: true, lerp: 0.09 });
     window.__lenis = lenis;
     return () => {
