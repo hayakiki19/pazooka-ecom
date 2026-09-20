@@ -27,6 +27,7 @@ export default function ProductDetail() {
   const [qty, setQty] = useState(1);
   const [imgIdx, setImgIdx] = useState(0);
   const [guideOpen, setGuideOpen] = useState(false);
+  const [openSection, setOpenSection] = useState("DESCRIPTION");
   const [notFound, setNotFound] = useState(false);
 
   useEffect(() => {
@@ -123,7 +124,7 @@ export default function ProductDetail() {
             <p className="font-mono text-[10px] tracking-[0.3em] text-zinc-500 uppercase">
               {product.category === "caps" ? "HEADWEAR" : product.fit}{product.gsm ? ` // ${product.gsm}` : ""} // {product.color}
             </p>
-            <h1 className="font-display text-5xl sm:text-6xl leading-[0.88] mt-3" data-testid="product-name">{product.name}</h1>
+            <h1 className="font-display text-3xl sm:text-4xl leading-[0.95] mt-3" data-testid="product-name">{product.name}</h1>
             <div className="flex items-baseline gap-3 mt-4">
               <span className="font-mono text-2xl font-bold" data-testid="product-price">{formatPrice(product.price)}</span>
               {product.original_price && (
@@ -237,6 +238,73 @@ export default function ProductDetail() {
           </div>
         </div>
       </div>
+
+      <section className="max-w-[1536px] mx-auto px-4 sm:px-8 lg:px-12 pb-14 sm:pb-20" data-testid="product-details-accordion">
+        <div className="border-t-2 border-black">
+          {["DESCRIPTION", "DETAILS", "MATERIAL", "RETURNS & REFUNDS"].map((section) => (
+            <div key={section} className="border-b border-zinc-200">
+              <button
+                data-testid={`accordion-${section.toLowerCase().replace(/[^a-z]+/g, "-")}`}
+                onClick={() => setOpenSection(openSection === section ? null : section)}
+                className="w-full flex items-center justify-between py-5 text-left group"
+              >
+                <span className="font-syne font-bold text-sm tracking-wide group-hover:text-zinc-500 transition-colors">{section}</span>
+                <ChevronDown size={16} className={`transition-transform duration-300 ${openSection === section ? "rotate-180" : ""}`} />
+              </button>
+              <AnimatePresence>
+                {openSection === section && (
+                  <motion.div
+                    initial={{ height: 0, opacity: 0 }}
+                    animate={{ height: "auto", opacity: 1 }}
+                    exit={{ height: 0, opacity: 0 }}
+                    transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
+                    className="overflow-hidden"
+                  >
+                    <div className="pb-7 max-w-2xl">
+                      {section === "DESCRIPTION" && (
+                        <p className="text-sm text-zinc-600 leading-relaxed">{product.description}</p>
+                      )}
+                      {section === "DETAILS" && (
+                        <dl className="grid grid-cols-2 sm:grid-cols-3 gap-5 font-mono text-xs">
+                          {[["FIT", product.fit], ["FABRIC", product.gsm || "STRUCTURED"], ["COLOR", product.color], ["SIZES", product.sizes.join(" / ")], ["SKU", product.id.toUpperCase()], ["DROP", "VOL.04"]].map(([k, v]) => (
+                            <div key={k}>
+                              <dt className="text-zinc-400 tracking-[0.2em]">{k}</dt>
+                              <dd className="font-bold mt-1.5 uppercase">{v}</dd>
+                            </div>
+                          ))}
+                        </dl>
+                      )}
+                      {section === "MATERIAL" && (
+                        <p className="text-sm text-zinc-600 leading-relaxed">
+                          {product.category === "caps"
+                            ? "Structured 100% cotton twill crown with embroidered eyelets and a pre-curved brim. Adjustable closure for a custom fit. Spot clean only — never machine wash."
+                            : `100% heavyweight combed cotton, ${product.gsm}. Pre-shrunk, garment-dyed and bio-washed for zero pilling. Ribbed crew collar with double-needle hems. Machine wash cold, inside out.`}
+                        </p>
+                      )}
+                      {section === "RETURNS & REFUNDS" && (
+                        <div className="space-y-4 text-sm leading-relaxed">
+                          <div>
+                            <p className="font-syne font-bold text-xs tracking-wide mb-1">RETURNS</p>
+                            <p className="text-zinc-600">Accepted only for defective, damaged, incorrect, or undelivered products. Must be requested within 24 hours.</p>
+                          </div>
+                          <div>
+                            <p className="font-syne font-bold text-xs tracking-wide mb-1">REFUNDS</p>
+                            <p className="text-zinc-600">Approved returns get a store credit coupon code (valid 50 days).</p>
+                          </div>
+                          <div>
+                            <p className="font-syne font-bold text-xs tracking-wide mb-1">EXCHANGES</p>
+                            <p className="text-zinc-600">Exchanges are strictly allowed only for size-related issues. Product exchanges are not permitted under any circumstances.</p>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
+          ))}
+        </div>
+      </section>
 
       <Reviews productId={product.id} />
 
