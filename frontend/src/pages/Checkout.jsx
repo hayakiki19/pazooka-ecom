@@ -1,9 +1,10 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { ArrowLeft, ArrowRight, Check } from "lucide-react";
 import { toast } from "sonner";
 import { createOrder } from "../lib/api";
 import { useShop } from "../context/ShopContext";
+import { useAuth } from "../context/AuthContext";
 import { Reveal } from "../components/motion";
 
 const inputCls =
@@ -12,6 +13,11 @@ const inputCls =
 export default function Checkout() {
   const { cart, cartTotal, clearCart, formatPrice } = useShop();
   const [form, setForm] = useState({ name: "", email: "", phone: "", address: "", city: "", zip: "" });
+  const { user } = useAuth();
+
+  useEffect(() => {
+    if (user) setForm((f) => ({ ...f, name: f.name || user.name || "", email: f.email || user.email || "" }));
+  }, [user]);
   const [promo, setPromo] = useState("");
   const [appliedPromo, setAppliedPromo] = useState(null);
   const [placing, setPlacing] = useState(false);

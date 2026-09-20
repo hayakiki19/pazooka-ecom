@@ -1,8 +1,9 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { AnimatePresence, motion } from "framer-motion";
-import { Heart, ShoppingBag, Menu, X, ArrowUpRight } from "lucide-react";
+import { Heart, ShoppingBag, Menu, X, ArrowUpRight, User } from "lucide-react";
 import { useShop, CURRENCIES } from "../context/ShopContext";
+import { useAuth } from "../context/AuthContext";
 import PromoBar from "./PromoBar";
 
 const NAV_LINKS = [
@@ -41,6 +42,7 @@ const MEGA_FEATURED = [
 
 export default function Navbar() {
   const { cartCount, wishlist, setCartOpen, setWishOpen, currency, setCurrency } = useShop();
+  const { user, setAuthModalOpen } = useAuth();
   const [megaOpen, setMegaOpen] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
 
@@ -83,6 +85,29 @@ export default function Navbar() {
           </ul>
 
           <div className="flex items-center gap-2 sm:gap-3">
+            {user ? (
+              <Link
+                to="/account"
+                data-testid="account-link"
+                aria-label="My account"
+                className="w-10 h-10 flex items-center justify-center border border-zinc-300 hover:border-black transition-colors overflow-hidden font-syne font-bold text-sm"
+              >
+                {user.picture ? (
+                  <img src={user.picture} alt="" className="w-full h-full object-cover" />
+                ) : (
+                  (user.name || "P")[0].toUpperCase()
+                )}
+              </Link>
+            ) : (
+              <button
+                data-testid="signin-btn"
+                aria-label="Sign in"
+                onClick={() => setAuthModalOpen(true)}
+                className="w-10 h-10 flex items-center justify-center border border-zinc-300 hover:border-black transition-colors"
+              >
+                <User size={17} />
+              </button>
+            )}
             <select
               data-testid="currency-select"
               aria-label="Select currency"
@@ -196,7 +221,7 @@ export default function Navbar() {
               </button>
             </div>
             <div className="flex-1 flex flex-col justify-center px-6 gap-2">
-              {[{ label: "HOME", to: "/" }, ...NAV_LINKS, { label: "LIMITED RUNS", to: "/shop?tag=LIMITED" }].map((l, i) => (
+              {[{ label: "HOME", to: "/" }, ...NAV_LINKS, { label: "LIMITED RUNS", to: "/shop?tag=LIMITED" }, { label: "ACCOUNT", to: "/account" }].map((l, i) => (
                 <motion.div key={l.label} initial={{ opacity: 0, x: -24 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.06 * i }}>
                   <Link to={l.to} onClick={() => setMobileOpen(false)} data-testid={`mobile-nav-${l.label.toLowerCase().replace(/\s+/g, "-")}`} className="font-display text-5xl sm:text-6xl leading-[1.05] hover:text-acid transition-colors flex items-center gap-3">
                     {l.label}

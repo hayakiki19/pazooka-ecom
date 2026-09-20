@@ -1,4 +1,4 @@
-from fastapi import FastAPI, APIRouter, HTTPException, UploadFile, File, Response
+from fastapi import FastAPI, APIRouter, HTTPException, UploadFile, File, Response, Request
 from dotenv import load_dotenv
 from starlette.middleware.cors import CORSMiddleware
 from motor.motor_asyncio import AsyncIOMotorClient
@@ -7,6 +7,7 @@ import logging
 import uuid
 import random
 import requests
+import bcrypt
 from pathlib import Path
 from pydantic import BaseModel
 from typing import List, Optional
@@ -292,7 +293,7 @@ SHIPPING_FLAT = 99.0
 
 
 @api_router.post("/orders")
-async def create_order(payload: OrderCreate):
+async def create_order(payload: OrderCreate, request: Request):
     if not payload.items:
         raise HTTPException(status_code=400, detail="Cart is empty")
     items = []
@@ -329,6 +330,9 @@ async def create_order(payload: OrderCreate):
         "status": "confirmed", "payment": "demo",
         "created_at": datetime.now(timezone.utc).isoformat(),
     }
+    user = await try_current_user(request)
+    if user:
+        order["user_id"] = user["user_id"]
     await db.orders.insert_one(order)
     order.pop("_id", None)
     return order
@@ -431,6 +435,183 @@ async def serve_review_photo(path: str):
     except Exception:
         raise HTTPException(status_code=404, detail="Photo not found")
     return Response(content=data, media_type=content_type)
+
+
+# ---------- AUTH ----------
+
+class RegisterIn(BaseModel):
+    name: str
+    email: str
+    password: str
+
+
+class LoginIn(BaseModel):
+    email: str
+    password: str
+
+
+async def create_session(user_id: str, response: Response) -> str:
+    token = f"pz_{uuid.uuid4().hex}"
+    await db.user_sessions.insert_one({
+        "user_id": user_id,
+        "session_token": token,
+        "expires_at": datetime.now(timezone.utc) + timedelta(days=7),
+        "created_at": datetime.now(timezone.utc),
+    })
+    response.set_cookie("session_token", token, httponly=True, secure=True, samesite="none", path="/", max_age=7 * 24 * 3600)
+    return token
+
+
+def public_user(u: dict) -> dict:
+    return {"user_id": u["user_id"], "email": u["email"], "name": u["name"], "picture": u.get("picture")}
+
+
+async def try_current_user(request: Request):
+    token = request.cookies.get("session_token")
+    if not token:
+        auth = request.headers.get("Authorization", "")
+        if auth.startswith("Bearer "):
+            token = auth[7:]
+    if not token:
+        return None
+    session = await db.user_sessions.find_one({"session_token": token}, {"_id": 0})
+    if not session:
+        return None
+    expires_at = session["expires_at"]
+    if isinstance(expires_at, str):
+        expires_at = datetime.fromisoformat(expires_at)
+    if expires_at.tzinfo is None:
+        expires_at = expires_at.replace(tzinfo=timezone.utc)
+    if expires_at < datetime.now(timezone.utc):
+        return None
+    return await db.users.find_one({"user_id": session["user_id"]}, {"_id": 0, "password_hash": 0})
+
+
+async def require_user(request: Request):
+    user = await try_current_user(request)
+    if not user:
+        raise HTTPException(status_code=401, detail="Sign in required")
+    return user
+
+
+@api_router.post("/auth/register", status_code=201)
+async def register_user(payload: RegisterIn, response: Response):
+    email = payload.email.strip().lower()
+    if not payload.name.strip() or "@" not in email:
+        raise HTTPException(status_code=400, detail="Valid name and email required")
+    if len(payload.password) < 6:
+        raise HTTPException(status_code=400, detail="Password must be at least 6 characters")
+    if await db.users.find_one({"email": email}):
+        raise HTTPException(status_code=400, detail="Account already exists — sign in instead")
+    user = {
+        "user_id": f"user_{uuid.uuid4().hex[:12]}",
+        "email": email,
+        "name": payload.name.strip(),
+        "picture": None,
+        "provider": "email",
+        "password_hash": bcrypt.hashpw(payload.password.encode(), bcrypt.gensalt()).decode(),
+        "created_at": datetime.now(timezone.utc).isoformat(),
+    }
+    await db.users.insert_one(user)
+    token = await create_session(user["user_id"], response)
+    return {**public_user(user), "session_token": token}
+
+
+@api_router.post("/auth/login")
+async def login_user(payload: LoginIn, response: Response):
+    user = await db.users.find_one({"email": payload.email.strip().lower()}, {"_id": 0})
+    if not user or not user.get("password_hash") or not bcrypt.checkpw(payload.password.encode(), user["password_hash"].encode()):
+        raise HTTPException(status_code=401, detail="Invalid email or password")
+    token = await create_session(user["user_id"], response)
+    return {**public_user(user), "session_token": token}
+
+
+@api_router.get("/auth/session")
+async def google_session(session_id: str, response: Response):
+    resp = requests.get(
+        "https://demobackend.emergentagent.com/auth/v1/env/oauth/session-data",
+        headers={"X-Session-ID": session_id},
+        timeout=30,
+    )
+    if resp.status_code != 200:
+        raise HTTPException(status_code=401, detail="Invalid session")
+    data = resp.json()
+    user = await db.users.find_one({"email": data["email"]}, {"_id": 0})
+    if user:
+        await db.users.update_one({"email": data["email"]}, {"$set": {"name": data["name"], "picture": data.get("picture")}})
+        user["name"] = data["name"]
+        user["picture"] = data.get("picture")
+    else:
+        user = {
+            "user_id": f"user_{uuid.uuid4().hex[:12]}",
+            "email": data["email"],
+            "name": data["name"],
+            "picture": data.get("picture"),
+            "provider": "google",
+            "created_at": datetime.now(timezone.utc).isoformat(),
+        }
+        await db.users.insert_one(user)
+    token = await create_session(user["user_id"], response)
+    return {**public_user(user), "session_token": token}
+
+
+@api_router.get("/auth/me")
+async def auth_me(request: Request):
+    return public_user(await require_user(request))
+
+
+@api_router.post("/auth/logout")
+async def logout_user(request: Request, response: Response):
+    token = request.cookies.get("session_token")
+    auth = request.headers.get("Authorization", "")
+    if not token and auth.startswith("Bearer "):
+        token = auth[7:]
+    if token:
+        await db.user_sessions.delete_many({"session_token": token})
+    response.delete_cookie("session_token", path="/")
+    return {"ok": True}
+
+
+@api_router.get("/auth/orders")
+async def my_orders(request: Request):
+    user = await require_user(request)
+    return await db.orders.find(
+        {"$or": [{"user_id": user["user_id"]}, {"customer.email": user["email"]}]}, {"_id": 0}
+    ).sort("created_at", -1).to_list(50)
+
+
+class ServiceRequestIn(BaseModel):
+    order_number: str
+    type: str
+    reason: str
+
+
+@api_router.post("/auth/requests", status_code=201)
+async def create_service_request(payload: ServiceRequestIn, request: Request):
+    user = await require_user(request)
+    if payload.type not in ("return", "exchange"):
+        raise HTTPException(status_code=400, detail="Type must be return or exchange")
+    order = await db.orders.find_one({"order_number": payload.order_number}, {"_id": 0})
+    if not order:
+        raise HTTPException(status_code=404, detail="Order not found")
+    doc = {
+        "request_id": f"REQ-{uuid.uuid4().hex[:8].upper()}",
+        "user_id": user["user_id"],
+        "order_number": payload.order_number,
+        "type": payload.type,
+        "reason": payload.reason.strip()[:500],
+        "status": "requested",
+        "created_at": datetime.now(timezone.utc).isoformat(),
+    }
+    await db.service_requests.insert_one(doc)
+    doc.pop("_id", None)
+    return doc
+
+
+@api_router.get("/auth/requests")
+async def my_service_requests(request: Request):
+    user = await require_user(request)
+    return await db.service_requests.find({"user_id": user["user_id"]}, {"_id": 0}).sort("created_at", -1).to_list(50)
 
 
 app.include_router(api_router)
