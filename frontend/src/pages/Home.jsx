@@ -127,6 +127,27 @@ export default function Home() {
     fetchProducts().then(setProducts).catch(() => {});
   }, []);
 
+  const railRef = useRef(null);
+
+  useEffect(() => {
+    const el = railRef.current;
+    if (!el) return;
+    const handler = (e) => {
+      const max = el.scrollWidth - el.clientWidth;
+      if (max <= 0) return;
+      const goingRight = e.deltaY > 0;
+      const atEnd = el.scrollLeft >= max - 2;
+      const atStart = el.scrollLeft <= 2;
+      if ((goingRight && !atEnd) || (!goingRight && !atStart)) {
+        e.preventDefault();
+        e.stopPropagation();
+        el.scrollLeft += e.deltaY * 2.2;
+      }
+    };
+    el.addEventListener("wheel", handler, { passive: false });
+    return () => el.removeEventListener("wheel", handler);
+  }, []);
+
   const newDrops = [...products].sort((a, b) => b.drop_index - a.drop_index).slice(0, 8);
   const heat = products.filter((p) => ["BESTSELLER", "HOT", "POPULAR"].includes(p.tag)).slice(0, 8);
 
@@ -217,9 +238,9 @@ export default function Home() {
             <Reveal><p className="font-mono text-[10px] sm:text-xs tracking-[0.3em] text-zinc-500 mb-3">MOST WANTED</p></Reveal>
             <Reveal delay={0.05}><h2 className="font-display text-6xl sm:text-7xl lg:text-8xl leading-[0.85]">THE HEAT</h2></Reveal>
           </div>
-          <Reveal delay={0.1}><p className="hidden sm:block font-mono text-[10px] tracking-[0.25em] text-zinc-400">SCROLL →</p></Reveal>
+          <Reveal delay={0.1}><p className="hidden sm:block font-mono text-[10px] tracking-[0.25em] text-zinc-400">HOVER + SCROLL →</p></Reveal>
         </div>
-        <div className="flex gap-3 sm:gap-5 overflow-x-auto no-scrollbar snap-x snap-mandatory pb-2 -mx-4 px-4 sm:mx-0 sm:px-0">
+        <div ref={railRef} data-testid="heat-rail" className="flex gap-3 sm:gap-5 overflow-x-auto no-scrollbar snap-x snap-mandatory pb-2 -mx-4 px-4 sm:mx-0 sm:px-0 cursor-grab">
           {heat.map((p) => (
             <div key={p.id} className="min-w-[240px] sm:min-w-[300px] snap-start">
               <ProductCard product={p} />
