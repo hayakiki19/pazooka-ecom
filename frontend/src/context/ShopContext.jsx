@@ -39,10 +39,11 @@ export function ShopProvider({ children }) {
     localStorage.setItem("pazooka_currency", currency);
   }, [currency]);
 
-  const addToCart = (product, size, qty = 1) => {
+  const addToCart = (product, size, qty = 1, color = null) => {
     const chosen = size || product.sizes[0];
+    const chosenColor = color || product.color || null;
     setCart((prev) => {
-      const key = `${product.id}-${chosen}`;
+      const key = `${product.id}-${chosen}-${chosenColor || "default"}`;
       const existing = prev.find((i) => i.key === key);
       if (existing) {
         return prev.map((i) => (i.key === key ? { ...i, qty: Math.min(i.qty + qty, 10) } : i));
@@ -56,6 +57,7 @@ export function ShopProvider({ children }) {
           price: product.price,
           image: product.images[0],
           size: chosen,
+          color: chosenColor,
           qty,
         },
       ];

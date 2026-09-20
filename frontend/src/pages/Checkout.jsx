@@ -37,7 +37,7 @@ export default function Checkout() {
     setPlacing(true);
     try {
       const payload = {
-        items: cart.map((i) => ({ product_id: i.id, size: i.size, qty: i.qty })),
+        items: cart.map((i) => ({ product_id: i.id, size: i.size, qty: i.qty, color: i.color })),
         customer: form,
         promo_code: appliedPromo,
       };
@@ -76,7 +76,7 @@ export default function Checkout() {
                 <img src={i.image} alt={i.name} className="w-14 h-16 object-cover bg-zinc-100" />
                 <div className="flex-1">
                   <p className="font-syne font-bold text-xs uppercase">{i.name}</p>
-                  <p className="font-mono text-[10px] text-zinc-500 tracking-widest mt-0.5">SIZE {i.size} × {i.qty}</p>
+                  <p className="font-mono text-[10px] text-zinc-500 tracking-widest mt-0.5">SIZE {i.size}{i.color ? ` // ${i.color.toUpperCase()}` : ""} × {i.qty}</p>
                 </div>
                 <span className="font-mono text-sm font-bold">{formatPrice(i.line_total)}</span>
               </div>
@@ -145,7 +145,7 @@ export default function Checkout() {
                   <img src={i.image} alt={i.name} className="w-12 h-14 object-cover bg-zinc-100" />
                   <div className="flex-1 min-w-0">
                     <p className="font-syne font-bold text-[11px] uppercase leading-tight truncate">{i.name}</p>
-                    <p className="font-mono text-[9px] text-zinc-500 tracking-widest mt-0.5">{i.size} × {i.qty}</p>
+                    <p className="font-mono text-[9px] text-zinc-500 tracking-widest mt-0.5">{i.size}{i.color ? ` // ${i.color.toUpperCase()}` : ""} × {i.qty}</p>
                   </div>
                   <span className="font-mono text-xs font-bold">{formatPrice(i.price * i.qty)}</span>
                 </div>

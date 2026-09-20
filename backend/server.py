@@ -224,6 +224,7 @@ class OrderItemIn(BaseModel):
     product_id: str
     size: str
     qty: int
+    color: Optional[str] = None
 
 
 class CustomerIn(BaseModel):
@@ -264,7 +265,7 @@ async def create_order(payload: OrderCreate):
         subtotal += line
         items.append({
             "product_id": p["id"], "name": p["name"], "price": p["price"],
-            "image": p["images"][0], "size": it.size, "qty": it.qty, "line_total": line,
+            "image": p["images"][0], "size": it.size, "color": it.color, "qty": it.qty, "line_total": line,
         })
     subtotal = round(subtotal, 2)
     discount = 0.0

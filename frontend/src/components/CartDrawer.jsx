@@ -59,7 +59,7 @@ export default function CartDrawer() {
                   <img src={item.image} alt={item.name} className="w-20 h-24 object-cover bg-zinc-100" />
                   <div className="flex-1 min-w-0">
                     <p className="font-syne font-bold text-xs uppercase leading-tight">{item.name}</p>
-                    <p className="font-mono text-[10px] text-zinc-500 tracking-widest mt-1">SIZE {item.size}</p>
+                    <p className="font-mono text-[10px] text-zinc-500 tracking-widest mt-1">SIZE {item.size}{item.color ? ` // ${item.color.toUpperCase()}` : ""}</p>
                     <div className="flex items-center justify-between mt-2.5">
                       <div className="flex items-center border border-zinc-300">
                         <button data-testid={`cart-minus-${item.key}`} aria-label="Decrease" onClick={() => updateQty(item.key, -1)} className="w-7 h-7 flex items-center justify-center hover:bg-zinc-100"><Minus size={12} /></button>

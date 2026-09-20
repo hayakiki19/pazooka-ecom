@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { AnimatePresence, motion } from "framer-motion";
-import { Heart, Minus, Plus, ChevronDown, Truck, RotateCcw, Zap } from "lucide-react";
+import { Heart, Minus, Plus, ChevronDown, Truck, RotateCcw, Zap, BadgePercent, Banknote, RefreshCcw } from "lucide-react";
 import { toast } from "sonner";
 import { fetchProduct, fetchProducts, checkPin } from "../lib/api";
 import { useShop } from "../context/ShopContext";
@@ -18,6 +18,39 @@ const SIZE_GUIDE = [
   { s: "XXL", chest: '48"', length: '31"' },
 ];
 
+const pickHex = (color = "") => {
+  const c = color.toLowerCase();
+  if (c.includes("black") || c.includes("coal") || c.includes("midnight") || c.includes("charcoal")) return "#161616";
+  if (c.includes("lime") || c.includes("acid")) return "#D4FF00";
+  if (c.includes("white") || c.includes("bone") || c.includes("chalk") || c.includes("ecru")) return "#F2F0EA";
+  if (c.includes("navy")) return "#2B3A55";
+  return "#8E8E88";
+};
+
+const EXTRA_COLORS = [
+  { name: "Triple Black", hex: "#161616" },
+  { name: "Bone White", hex: "#F2F0EA" },
+  { name: "Concrete Grey", hex: "#8E8E88" },
+];
+
+const buildGallery = (product) => {
+  const main = product.images[0];
+  if (main.startsWith("/products/")) {
+    const base = main.replace(".png", "");
+    return [main, ...[2, 3, 4, 5, 6, 7, 8].map((n) => `${base}-v${n}.jpg`)];
+  }
+  return [
+    main,
+    `${main}&flip=h`,
+    `${main}&h=1000&crop=entropy`,
+    `${main}&h=1000&crop=top`,
+    `${main}&h=1000&crop=bottom`,
+    `${main}&h=1000&crop=left`,
+    `${main}&h=1000&crop=right`,
+    `${main}&sat=-70`,
+  ];
+};
+
 export default function ProductDetail() {
   const { id } = useParams();
   const { addToCart, toggleWishlist, isWishlisted, setCartOpen, formatPrice } = useShop();
@@ -25,7 +58,7 @@ export default function ProductDetail() {
   const [related, setRelated] = useState([]);
   const [size, setSize] = useState(null);
   const [qty, setQty] = useState(1);
-  const [imgIdx, setImgIdx] = useState(0);
+  const [selectedColor, setSelectedColor] = useState(null);
   const [guideOpen, setGuideOpen] = useState(false);
   const [openSection, setOpenSection] = useState("DESCRIPTION");
   const [pin, setPin] = useState("");
@@ -55,7 +88,7 @@ export default function ProductDetail() {
     setProduct(null);
     setSize(null);
     setQty(1);
-    setImgIdx(0);
+    setSelectedColor(null);
     setNotFound(false);
     setPin("");
     setPinResult(null);
@@ -63,6 +96,7 @@ export default function ProductDetail() {
     fetchProduct(id)
       .then((p) => {
         setProduct(p);
+        setSelectedColor(p.color);
         if (p.sizes.length === 1) setSize(p.sizes[0]);
         fetchProducts({ category: p.category }).then((all) =>
           setRelated(all.filter((x) => x.id !== p.id).slice(0, 4))
@@ -97,12 +131,17 @@ export default function ProductDetail() {
   }
 
   const wish = isWishlisted(product.id);
+  const colorways = [
+    { name: product.color, hex: pickHex(product.color) },
+    ...EXTRA_COLORS.filter((c) => c.name.toLowerCase() !== (product.color || "").toLowerCase()).slice(0, 2),
+  ];
+  const gallery = buildGallery(product);
   const handleAdd = () => {
     if (!size) {
       toast.error("SELECT A SIZE FIRST");
       return;
     }
-    addToCart(product, size, qty);
+    addToCart(product, size, qty, selectedColor);
     setCartOpen(true);
   };
 
@@ -114,37 +153,23 @@ export default function ProductDetail() {
         </p>
 
         <div className="grid lg:grid-cols-2 gap-8 lg:gap-14">
-          <div>
-            <div className="relative aspect-[3/4] bg-zinc-100 overflow-hidden border border-zinc-200">
-              <AnimatePresence mode="wait">
-                <motion.img
-                  key={imgIdx}
-                  src={product.images[imgIdx]}
-                  alt={product.name}
-                  initial={{ opacity: 0, scale: 1.04 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  exit={{ opacity: 0 }}
-                  transition={{ duration: 0.45 }}
-                  className="absolute inset-0 h-full w-full object-cover"
+          <div className="grid grid-cols-2 gap-2 content-start" data-testid="product-gallery">
+            {gallery.map((src, i) => (
+              <div key={i} data-testid={`gallery-img-${i}`} className="group relative aspect-[3/4] overflow-hidden bg-zinc-100 border border-zinc-200">
+                <img
+                  src={src}
+                  alt={`${product.name} view ${i + 1}`}
+                  loading={i < 2 ? "eager" : "lazy"}
+                  className="absolute inset-0 h-full w-full object-cover group-hover:scale-105 transition-transform duration-700"
                 />
-              </AnimatePresence>
-              <span className="absolute top-4 left-4 bg-acid text-black font-mono text-[10px] font-bold tracking-widest px-2.5 py-1">{product.tag}</span>
-            </div>
-            <div className="flex gap-2 mt-2">
-              {product.images.map((img, i) => (
-                <button
-                  key={i}
-                  data-testid={`thumb-${i}`}
-                  onClick={() => setImgIdx(i)}
-                  className={`relative w-20 aspect-[3/4] overflow-hidden border-2 transition-colors ${imgIdx === i ? "border-black" : "border-transparent hover:border-zinc-400"}`}
-                >
-                  <img src={img} alt="" className="absolute inset-0 h-full w-full object-cover" />
-                </button>
-              ))}
-            </div>
+                {i === 0 && (
+                  <span className="absolute top-4 left-4 bg-acid text-black font-mono text-[10px] font-bold tracking-widest px-2.5 py-1">{product.tag}</span>
+                )}
+              </div>
+            ))}
           </div>
 
-          <div>
+          <div className="lg:sticky lg:top-28 self-start">
             <p className="font-mono text-[10px] tracking-[0.3em] text-zinc-500 uppercase">
               {product.category === "caps" ? "HEADWEAR" : product.fit}{product.gsm ? ` // ${product.gsm}` : ""} // {product.color}
             </p>
@@ -224,6 +249,25 @@ export default function ProductDetail() {
               </div>
             </div>
 
+            <div className="mt-6">
+              <p className="font-mono text-[10px] tracking-[0.3em] text-zinc-500 mb-2.5">
+                COLOUR — <span className="text-black font-bold uppercase">{selectedColor}</span>
+              </p>
+              <div className="flex gap-2.5">
+                {colorways.map((c) => (
+                  <button
+                    key={c.name}
+                    data-testid={`color-${c.name.toLowerCase().replace(/[^a-z]+/g, "-")}`}
+                    onClick={() => setSelectedColor(c.name)}
+                    aria-label={c.name}
+                    title={c.name}
+                    style={{ backgroundColor: c.hex }}
+                    className={`w-10 h-10 border-2 transition-all ${selectedColor === c.name ? "border-black shadow-[3px_3px_0px_0px_#D4FF00]" : "border-zinc-300 hover:border-black"}`}
+                  />
+                ))}
+              </div>
+            </div>
+
             <div className="flex gap-2 mt-6">
               <div className="flex items-center border border-zinc-300">
                 <button data-testid="qty-minus" aria-label="Decrease quantity" onClick={() => setQty(Math.max(1, qty - 1))} className="w-12 h-12 flex items-center justify-center hover:bg-zinc-100"><Minus size={14} /></button>
@@ -245,6 +289,28 @@ export default function ProductDetail() {
               >
                 <Heart size={17} fill={wish ? "currentColor" : "none"} />
               </button>
+            </div>
+
+            <div className="mt-6 border border-zinc-200 p-4" data-testid="best-offers">
+              <p className="font-mono text-[10px] tracking-[0.25em] text-zinc-500 mb-3">BEST OFFERS</p>
+              <ul className="space-y-3">
+                <li className="flex items-start gap-2.5 text-sm">
+                  <BadgePercent size={16} className="shrink-0 mt-0.5" />
+                  <span><span className="bg-acid font-mono text-[10px] font-bold px-1.5 py-0.5 mr-2">PAZOOKA10</span>Flat 10% off on your first order</span>
+                </li>
+                <li className="flex items-start gap-2.5 text-sm">
+                  <Truck size={16} className="shrink-0 mt-0.5" />
+                  <span>Free shipping on all orders over ₹2,999</span>
+                </li>
+                <li className="flex items-start gap-2.5 text-sm">
+                  <Banknote size={16} className="shrink-0 mt-0.5" />
+                  <span>COD available on eligible PIN codes</span>
+                </li>
+                <li className="flex items-start gap-2.5 text-sm">
+                  <RefreshCcw size={16} className="shrink-0 mt-0.5" />
+                  <span>Size exchanges accepted within 24 hours of delivery</span>
+                </li>
+              </ul>
             </div>
 
             <div className="mt-6 border border-zinc-200 p-4" data-testid="pin-check">
