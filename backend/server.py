@@ -311,6 +311,39 @@ async def add_review(product_id: str, payload: ReviewCreate):
     return doc
 
 
+class PinCheckIn(BaseModel):
+    pin: str
+
+
+METRO_ZONES = {
+    "110": "DELHI NCR", "400": "MUMBAI", "560": "BENGALURU", "600": "CHENNAI",
+    "700": "KOLKATA", "500": "HYDERABAD", "411": "PUNE", "380": "AHMEDABAD",
+}
+REMOTE_PREFIXES = {"18", "19", "74", "77", "78", "79"}
+
+
+@api_router.post("/delivery/check")
+async def check_delivery(payload: PinCheckIn):
+    pin = payload.pin.strip()
+    if not pin.isdigit() or len(pin) != 6 or pin[0] == "0":
+        raise HTTPException(status_code=400, detail="Enter a valid 6-digit PIN code")
+    now = datetime.now(timezone.utc)
+    zone = METRO_ZONES.get(pin[:3])
+    remote = pin[:2] in REMOTE_PREFIXES
+    days = (2, 3) if zone else ((6, 8) if remote else (4, 6))
+
+    def fmt(offset):
+        return (now + timedelta(days=offset)).strftime("%a, %d %b")
+
+    return {
+        "pin": pin,
+        "serviceable": True,
+        "zone": zone,
+        "eta": f"{fmt(days[0])} — {fmt(days[1])}",
+        "cod_available": not remote,
+    }
+
+
 app.include_router(api_router)
 
 app.add_middleware(

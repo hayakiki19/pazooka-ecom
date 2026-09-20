@@ -61,7 +61,7 @@ export default function Footer() {
               <p className="font-mono text-[10px] tracking-[0.3em] text-zinc-500 mb-4">INFO</p>
               <ul className="space-y-2.5 font-mono text-xs text-zinc-400">
                 <li>Free shipping ₹2,999+</li>
-                <li>30-day returns</li>
+                <li>Returns: 24h window</li>
                 <li>Ships in 48h</li>
                 <li>280 GSM or nothing</li>
               </ul>

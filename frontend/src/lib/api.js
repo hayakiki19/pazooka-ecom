@@ -15,4 +15,6 @@ export const fetchReviews = (id) => axios.get(`${API}/products/${id}/reviews`).t
 export const createReview = (id, payload) =>
   axios.post(`${API}/products/${id}/reviews`, payload).then((r) => r.data);
 
+export const checkPin = (pin) => axios.post(`${API}/delivery/check`, { pin }).then((r) => r.data);
+
 export const createOrder = (payload) => axios.post(`${API}/orders`, payload).then((r) => r.data);

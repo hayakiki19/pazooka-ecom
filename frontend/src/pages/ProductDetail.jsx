@@ -3,7 +3,7 @@ import { Link, useParams } from "react-router-dom";
 import { AnimatePresence, motion } from "framer-motion";
 import { Heart, Minus, Plus, ChevronDown, Truck, RotateCcw, Zap } from "lucide-react";
 import { toast } from "sonner";
-import { fetchProduct, fetchProducts } from "../lib/api";
+import { fetchProduct, fetchProducts, checkPin } from "../lib/api";
 import { useShop } from "../context/ShopContext";
 import ProductCard from "../components/ProductCard";
 import Stars from "../components/Stars";
@@ -28,6 +28,27 @@ export default function ProductDetail() {
   const [imgIdx, setImgIdx] = useState(0);
   const [guideOpen, setGuideOpen] = useState(false);
   const [openSection, setOpenSection] = useState("DESCRIPTION");
+  const [pin, setPin] = useState("");
+  const [pinResult, setPinResult] = useState(null);
+  const [pinError, setPinError] = useState(null);
+  const [pinChecking, setPinChecking] = useState(false);
+
+  const checkPinCode = async () => {
+    setPinError(null);
+    setPinResult(null);
+    if (!/^[1-9][0-9]{5}$/.test(pin)) {
+      setPinError("ENTER A VALID 6-DIGIT PIN CODE");
+      return;
+    }
+    setPinChecking(true);
+    try {
+      setPinResult(await checkPin(pin));
+    } catch (err) {
+      setPinError(err?.response?.data?.detail || "COULDN'T CHECK DELIVERY");
+    } finally {
+      setPinChecking(false);
+    }
+  };
   const [notFound, setNotFound] = useState(false);
 
   useEffect(() => {
@@ -36,6 +57,9 @@ export default function ProductDetail() {
     setQty(1);
     setImgIdx(0);
     setNotFound(false);
+    setPin("");
+    setPinResult(null);
+    setPinError(null);
     fetchProduct(id)
       .then((p) => {
         setProduct(p);
@@ -223,10 +247,47 @@ export default function ProductDetail() {
               </button>
             </div>
 
+            <div className="mt-6 border border-zinc-200 p-4" data-testid="pin-check">
+              <p className="font-mono text-[10px] tracking-[0.25em] text-zinc-500 mb-3">DELIVERY CHECK</p>
+              <div className="flex gap-2">
+                <input
+                  data-testid="pin-input"
+                  value={pin}
+                  onChange={(e) => setPin(e.target.value.replace(/\D/g, "").slice(0, 6))}
+                  onKeyDown={(e) => e.key === "Enter" && checkPinCode()}
+                  placeholder="ENTER PIN CODE"
+                  inputMode="numeric"
+                  className="flex-1 border border-zinc-300 focus:border-black px-4 py-3 font-mono text-xs tracking-[0.2em] focus:outline-none transition-colors"
+                />
+                <button
+                  data-testid="pin-check-btn"
+                  onClick={checkPinCode}
+                  disabled={pinChecking}
+                  className="bg-black text-white font-mono text-[10px] font-bold tracking-[0.2em] px-5 hover:bg-acid hover:text-black transition-colors disabled:opacity-50"
+                >
+                  {pinChecking ? "..." : "CHECK"}
+                </button>
+              </div>
+              {pinError && (
+                <p data-testid="pin-error" className="font-mono text-[11px] tracking-widest text-[#FF3B30] mt-3">{pinError}</p>
+              )}
+              {pinResult && (
+                <div data-testid="pin-result" className="mt-3 bg-ink text-white p-4">
+                  <p className="font-syne font-bold text-sm">
+                    DELIVERING TO {pinResult.pin}{pinResult.zone ? ` — ${pinResult.zone}` : ""}
+                  </p>
+                  <p className="font-mono text-[11px] tracking-widest text-acid mt-1.5">ESTIMATED {pinResult.eta}</p>
+                  <p className="font-mono text-[10px] tracking-widest text-zinc-400 mt-1">
+                    {pinResult.cod_available ? "COD AVAILABLE // FREE SHIPPING OVER ₹2,999" : "PREPAID ONLY // FREE SHIPPING OVER ₹2,999"}
+                  </p>
+                </div>
+              )}
+            </div>
+
             <div className="grid grid-cols-3 gap-px bg-zinc-200 border border-zinc-200 mt-8">
               {[
                 { icon: Truck, t: "FREE SHIPPING ₹2,999+" },
-                { icon: RotateCcw, t: "30-DAY RETURNS" },
+                { icon: RotateCcw, t: "24H RETURN WINDOW" },
                 { icon: Zap, t: "SHIPS IN 48H" },
               ].map((f) => (
                 <div key={f.t} className="bg-white px-3 py-4 flex flex-col items-center gap-2 text-center">
