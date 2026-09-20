@@ -17,7 +17,7 @@ Build a website inspired by bonkerscorner.com and wtflex.in — a premium Gen-Z 
 
 ## Core Requirements (static)
 - 21-product seeded catalog (10 oversized, 6 regular, 5 caps), real photography, hover image swap
-- Home: kinetic hero with masked line reveal + parallax, marquee strips, new drops grid, 2 huge campaign banners, collections bento, numbered manifesto, footer newsletter
+- Home: auto-playing slider hero (4 streetwear photoshoot slides, crossfade + Ken Burns, arrows + acid progress dots) and both campaign banners converted to 3-slide sliders; marquee strips, new drops grid, collections bento, numbered manifesto, footer newsletter
 - Shop: category tabs, tag chips, search, sort, result count, sticky filter bar
 - Product detail: gallery, size selector + size guide, qty, add to cart, wishlist, related items
 - Cart + wishlist drawers (localStorage persisted), free-shipping progress bar

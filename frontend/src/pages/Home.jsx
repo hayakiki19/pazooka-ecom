@@ -5,11 +5,25 @@ import { ArrowRight, ArrowUpRight } from "lucide-react";
 import { fetchProducts } from "../lib/api";
 import ProductCard from "../components/ProductCard";
 import Marquee from "../components/Marquee";
+import BannerSlider from "../components/BannerSlider";
 import { Reveal } from "../components/motion";
 
-const HERO_IMG = "https://images.pexels.com/photos/18584221/pexels-photo-18584221.jpeg?auto=compress&cs=tinysrgb&w=1600&h=1100&fit=crop";
-const CAMPAIGN_1 = "https://images.unsplash.com/photo-1721637686340-de9f8cebda5a?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjAzNzl8MHwxfHNlYXJjaHwxfHx1cmJhbiUyMHN0cmVldHdlYXIlMjBtb2RlbCUyMG92ZXJzaXplZCUyMHRzaGlydCUyMGZhc2hpb24lMjBlZGl0b3JpYWx8ZW58MHx8fHwxNzg5ODU0MTAyfDA&ixlib=rb-4.1.0&q=75&w=1600";
-const CAMPAIGN_2 = "https://images.unsplash.com/photo-1721637635502-b0abaaa75edb?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjAzNzl8MHwxfHNlYXJjaHwyfHx1cmJhbiUyMHN0cmVldHdlYXIlMjBtb2RlbCUyMG92ZXJzaXplZCUyMHRzaGlydCUyMGZhc2hpb24lMjBlZGl0b3JpYWx8ZW58MHx8fHwxNzg5ODU0MTAyfDA&ixlib=rb-4.1.0&q=75&w=1600";
+const HERO_SLIDES = [
+  "https://images.pexels.com/photos/18584221/pexels-photo-18584221.jpeg?auto=compress&cs=tinysrgb&w=1600&h=1100&fit=crop",
+  "https://images.unsplash.com/photo-1721637686340-de9f8cebda5a?crop=entropy&cs=srgb&fm=jpg&ixlib=rb-4.1.0&q=75&w=1600",
+  "https://images.unsplash.com/photo-1635650804060-bb009bcb2ea5?crop=entropy&cs=srgb&fm=jpg&ixlib=rb-4.1.0&q=75&w=1600",
+  "https://images.pexels.com/photos/14241847/pexels-photo-14241847.jpeg?auto=compress&cs=tinysrgb&w=1600&h=1000&fit=crop",
+];
+const CAMPAIGN_1_SLIDES = [
+  "https://images.unsplash.com/photo-1721637686340-de9f8cebda5a?crop=entropy&cs=srgb&fm=jpg&ixlib=rb-4.1.0&q=75&w=1400",
+  "https://images.unsplash.com/photo-1535487958887-032fb5767ade?crop=entropy&cs=srgb&fm=jpg&ixlib=rb-4.1.0&q=75&w=1400",
+  "https://images.unsplash.com/photo-1646197879186-2add4e5225a6?crop=entropy&cs=srgb&fm=jpg&ixlib=rb-4.1.0&q=75&w=1400",
+];
+const CAMPAIGN_2_SLIDES = [
+  "https://images.unsplash.com/photo-1721637635502-b0abaaa75edb?crop=entropy&cs=srgb&fm=jpg&ixlib=rb-4.1.0&q=75&w=1400",
+  "https://images.pexels.com/photos/28701960/pexels-photo-28701960.jpeg?auto=compress&cs=tinysrgb&w=1400&h=900&fit=crop",
+  "https://images.unsplash.com/photo-1669266586576-639523db9306?crop=entropy&cs=srgb&fm=jpg&ixlib=rb-4.1.0&q=75&w=1400",
+];
 const BENTO_OVERSIZED = "https://images.pexels.com/photos/32819862/pexels-photo-32819862.jpeg?auto=compress&cs=tinysrgb&w=1200";
 const BENTO_REGULAR = "https://images.pexels.com/photos/35515095/pexels-photo-35515095.jpeg?auto=compress&cs=tinysrgb&w=800";
 const BENTO_CAPS = "https://images.unsplash.com/photo-1532332248682-206cc786359f?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NDQ2Mzl8MHwxfHNlYXJjaHszfHxzdHJlZXR3ZWFyJTIwYmFzZWJhbGwlMjBjYXAlMjBiZWFuaWUlMjBoYXQlMjBmYXNoaW9uJTIwbW9kZWx8ZW58MHx8fHwxNzg5ODU0MTA4fDA&ixlib=rb-4.1.0&q=75&w=1600";
@@ -24,8 +38,8 @@ function Hero() {
   return (
     <section ref={ref} data-testid="hero-section" className="relative h-[100svh] min-h-[620px] bg-ink overflow-hidden">
       <motion.div style={{ y, scale }} className="absolute inset-0 will-change-transform">
-        <img src={HERO_IMG} alt="PAZOOKA streetwear editorial" className="h-full w-full object-cover opacity-70" />
-        <div className="absolute inset-0 bg-gradient-to-t from-black via-black/25 to-black/50" />
+        <BannerSlider images={HERO_SLIDES} interval={5000} imgClassName="opacity-70" showArrows testId="hero" />
+        <div className="absolute inset-0 bg-gradient-to-t from-black via-black/25 to-black/50 pointer-events-none" />
       </motion.div>
 
       <div className="absolute -bottom-3 left-0 right-0 z-[5] pointer-events-none select-none overflow-hidden" aria-hidden="true">
@@ -61,7 +75,7 @@ function Hero() {
   );
 }
 
-function CampaignBanner({ img, overline, line1, line2, copy, cta, to, testId }) {
+function CampaignBanner({ images, overline, line1, line2, copy, cta, to, testId }) {
   const ref = useRef(null);
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start end", "end start"] });
   const y = useTransform(scrollYProgress, [0, 1], ["-12%", "12%"]);
@@ -69,7 +83,7 @@ function CampaignBanner({ img, overline, line1, line2, copy, cta, to, testId }) 
   return (
     <section ref={ref} data-testid={testId} className="relative h-[78vh] min-h-[540px] overflow-hidden bg-ink">
       <motion.div style={{ y }} className="absolute -inset-y-[14%] inset-x-0 will-change-transform">
-        <img src={img} alt="" className="h-full w-full object-cover opacity-60" />
+        <BannerSlider images={images} interval={4500} imgClassName="opacity-60" testId={testId} />
       </motion.div>
       <div className="absolute inset-0 bg-gradient-to-r from-black/85 via-black/40 to-transparent" />
       <div className="relative z-10 h-full max-w-[1536px] mx-auto px-4 sm:px-8 lg:px-12 flex flex-col justify-center">
@@ -152,7 +166,7 @@ export default function Home() {
 
       <CampaignBanner
         testId="campaign-acid-culture"
-        img={CAMPAIGN_1}
+        images={CAMPAIGN_1_SLIDES}
         overline="CAMPAIGN VOL.04"
         line1="THE ACID"
         line2="CULTURE."
@@ -188,7 +202,7 @@ export default function Home() {
 
       <CampaignBanner
         testId="campaign-tee-matrix"
-        img={CAMPAIGN_2}
+        images={CAMPAIGN_2_SLIDES}
         overline="SILHOUETTE STUDY"
         line1="OVERSIZED"
         line2="TEE MATRIX."
