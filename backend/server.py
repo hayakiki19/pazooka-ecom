@@ -1,4 +1,4 @@
-from fastapi import FastAPI, APIRouter, HTTPException
+from fastapi import FastAPI, APIRouter, HTTPException, UploadFile, File, Response
 from dotenv import load_dotenv
 from starlette.middleware.cors import CORSMiddleware
 from motor.motor_asyncio import AsyncIOMotorClient
@@ -6,6 +6,7 @@ import os
 import logging
 import uuid
 import random
+import requests
 from pathlib import Path
 from pydantic import BaseModel
 from typing import List, Optional
@@ -17,6 +18,36 @@ load_dotenv(ROOT_DIR / '.env')
 mongo_url = os.environ['MONGO_URL']
 client = AsyncIOMotorClient(mongo_url)
 db = client[os.environ['DB_NAME']]
+
+STORAGE_BASE = (os.environ.get("INTEGRATION_PROXY_URL") or "").strip() or "https://integrations.emergentagent.com"
+STORAGE_URL = STORAGE_BASE.rstrip("/") + "/objstore/api/v1/storage"
+EMERGENT_KEY = os.environ.get("EMERGENT_LLM_KEY")
+APP_NAME = "pazooka"
+storage_key = None
+
+
+def init_storage(force=False):
+    global storage_key
+    if storage_key and not force:
+        return storage_key
+    resp = requests.post(f"{STORAGE_URL}/init", json={"emergent_key": EMERGENT_KEY}, timeout=30)
+    resp.raise_for_status()
+    storage_key = resp.json()["storage_key"]
+    return storage_key
+
+
+def put_object(path, data, content_type):
+    key = init_storage()
+    resp = requests.put(f"{STORAGE_URL}/objects/{path}", headers={"X-Storage-Key": key, "Content-Type": content_type}, data=data, timeout=120)
+    resp.raise_for_status()
+    return resp.json()
+
+
+def get_object(path):
+    key = init_storage()
+    resp = requests.get(f"{STORAGE_URL}/objects/{path}", headers={"X-Storage-Key": key}, timeout=60)
+    resp.raise_for_status()
+    return resp.content, resp.headers.get("Content-Type", "application/octet-stream")
 
 app = FastAPI()
 api_router = APIRouter(prefix="/api")
@@ -129,6 +160,18 @@ REVIEW_POOL = [
 ]
 
 
+FIT_PICS = [
+    U + "photo-1635650804060-bb009bcb2ea5?auto=format&fit=crop&w=400&q=70",
+    U + "photo-1721637686340-de9f8cebda5a?auto=format&fit=crop&w=400&q=70",
+    U + "photo-1535487958887-032fb5767ade?auto=format&fit=crop&w=400&q=70",
+    U + "photo-1646197879186-2add4e5225a6?auto=format&fit=crop&w=400&q=70",
+    U + "photo-1669266586576-639523db9306?auto=format&fit=crop&w=400&q=70",
+    U + "photo-1721637635502-b0abaaa75edb?auto=format&fit=crop&w=400&q=70",
+    U + "photo-1646197879190-78a962aab29b?auto=format&fit=crop&w=400&q=70",
+    U + "photo-1721664705833-eec0584e7222?auto=format&fit=crop&w=400&q=70",
+]
+
+
 def build_seed_reviews(pid):
     rng = random.Random(f"pazooka-{pid}")
     reviews = []
@@ -141,6 +184,7 @@ def build_seed_reviews(pid):
             "title": title,
             "comment": body,
             "verified": rng.random() > 0.15,
+            "photos": rng.sample(FIT_PICS, rng.choice([0, 1, 1, 2])),
             "created_at": (datetime.now(timezone.utc) - timedelta(days=rng.randint(2, 120))).isoformat(),
         })
     return reviews
@@ -295,6 +339,7 @@ class ReviewCreate(BaseModel):
     rating: int
     title: Optional[str] = None
     comment: str
+    photos: Optional[List[str]] = []
 
 
 @api_router.get("/products/{product_id}/reviews")
@@ -319,6 +364,7 @@ async def add_review(product_id: str, payload: ReviewCreate):
         "title": (payload.title or "").strip()[:80],
         "comment": payload.comment.strip()[:600],
         "verified": False,
+        "photos": (payload.photos or [])[:3],
         "created_at": datetime.now(timezone.utc).isoformat(),
     }
     await db.reviews.insert_one(doc)
@@ -359,6 +405,34 @@ async def check_delivery(payload: PinCheckIn):
     }
 
 
+@api_router.post("/uploads", status_code=201)
+async def upload_file(file: UploadFile = File(...)):
+    if not (file.content_type or "").startswith("image/"):
+        raise HTTPException(status_code=400, detail="Only image uploads are allowed")
+    data = await file.read()
+    if len(data) > 5 * 1024 * 1024:
+        raise HTTPException(status_code=400, detail="Image must be under 5MB")
+    ext = file.filename.split(".")[-1].lower() if "." in (file.filename or "") else "jpg"
+    if ext not in ("jpg", "jpeg", "png", "webp", "gif"):
+        ext = "jpg"
+    path = f"{APP_NAME}/review-photos/{uuid.uuid4()}.{ext}"
+    try:
+        result = put_object(path, data, file.content_type or "image/jpeg")
+    except Exception as e:
+        logger.error(f"Storage upload failed: {e}")
+        raise HTTPException(status_code=502, detail="Photo storage unavailable right now")
+    return {"path": result["path"]}
+
+
+@api_router.get("/review-photos/{path:path}")
+async def serve_review_photo(path: str):
+    try:
+        data, content_type = get_object(path)
+    except Exception:
+        raise HTTPException(status_code=404, detail="Photo not found")
+    return Response(content=data, media_type=content_type)
+
+
 app.include_router(api_router)
 
 app.add_middleware(
@@ -375,9 +449,15 @@ logger = logging.getLogger(__name__)
 
 @app.on_event("startup")
 async def seed_products():
+    try:
+        init_storage()
+        logger.info("Object storage initialized")
+    except Exception as e:
+        logger.error(f"Storage init failed: {e}")
     for p in PRODUCTS:
         await db.products.update_one({"id": p["id"]}, {"$set": p}, upsert=True)
     logger.info("Seeded %d PAZOOKA products", len(PRODUCTS))
+    await db.reviews.delete_many({"photos": {"$exists": False}})
     for p in PRODUCTS:
         if await db.reviews.count_documents({"product_id": p["id"]}) == 0:
             await db.reviews.insert_many(build_seed_reviews(p["id"]))

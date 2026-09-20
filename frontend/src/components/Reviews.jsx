@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
-import { BadgeCheck } from "lucide-react";
+import { BadgeCheck, ImagePlus, X } from "lucide-react";
 import { toast } from "sonner";
-import { createReview, fetchReviews } from "../lib/api";
+import { createReview, fetchReviews, uploadPhoto, reviewPhotoUrl } from "../lib/api";
 import Stars from "./Stars";
 import { Reveal } from "./motion";
 
@@ -12,6 +12,7 @@ export default function Reviews({ productId }) {
   const [data, setData] = useState(null);
   const [formOpen, setFormOpen] = useState(false);
   const [form, setForm] = useState({ name: "", rating: 5, title: "", comment: "" });
+  const [photos, setPhotos] = useState([]);
   const [submitting, setSubmitting] = useState(false);
 
   const load = () => fetchReviews(productId).then(setData).catch(() => {});
@@ -25,9 +26,14 @@ export default function Reviews({ productId }) {
     e.preventDefault();
     setSubmitting(true);
     try {
-      await createReview(productId, form);
+      const paths = [];
+      for (const f of photos) {
+        paths.push(await uploadPhoto(f));
+      }
+      await createReview(productId, { ...form, photos: paths });
       toast.success("REVIEW POSTED");
       setForm({ name: "", rating: 5, title: "", comment: "" });
+      setPhotos([]);
       setFormOpen(false);
       load();
     } catch (err) {
@@ -90,6 +96,36 @@ export default function Reviews({ productId }) {
                 <input data-testid="review-title" value={form.title} onChange={(e) => setForm({ ...form, title: e.target.value })} placeholder="HEADLINE (OPTIONAL)" className={inputCls} />
               </div>
               <textarea data-testid="review-comment" required rows={3} value={form.comment} onChange={(e) => setForm({ ...form, comment: e.target.value })} placeholder="HOW'S THE FIT, THE FABRIC, THE DROP?" className={`${inputCls} resize-none`} />
+              <div>
+                <label data-testid="review-photo-label" className="flex items-center justify-center gap-2 border border-dashed border-zinc-300 hover:border-black px-4 py-4 cursor-pointer font-mono text-[10px] tracking-[0.25em] text-zinc-500 hover:text-black transition-colors">
+                  <ImagePlus size={14} /> ADD PHOTOS (MAX 3)
+                  <input
+                    data-testid="review-photo-input"
+                    type="file"
+                    accept="image/*"
+                    multiple
+                    className="hidden"
+                    onChange={(e) => setPhotos(Array.from(e.target.files || []).slice(0, 3))}
+                  />
+                </label>
+                {photos.length > 0 && (
+                  <div className="flex gap-2 mt-3" data-testid="review-photo-previews">
+                    {photos.map((f, i) => (
+                      <div key={i} className="relative">
+                        <img src={URL.createObjectURL(f)} alt="" className="w-16 h-16 object-cover border border-zinc-200" />
+                        <button
+                          type="button"
+                          aria-label="Remove photo"
+                          onClick={() => setPhotos(photos.filter((_, j) => j !== i))}
+                          className="absolute -top-1.5 -right-1.5 w-5 h-5 bg-black text-white flex items-center justify-center hover:bg-[#FF3B30] transition-colors"
+                        >
+                          <X size={10} />
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
               <button data-testid="review-submit-btn" type="submit" disabled={submitting} className="bg-acid text-black font-syne font-bold text-sm px-8 py-3.5 hover:bg-black hover:text-acid transition-colors disabled:opacity-50">
                 {submitting ? "POSTING..." : "POST REVIEW"}
               </button>
@@ -109,6 +145,20 @@ export default function Reviews({ productId }) {
                   </span>
                 </div>
                 <p className="text-sm text-zinc-600 leading-relaxed mt-3">{r.comment}</p>
+                {r.photos && r.photos.length > 0 && (
+                  <div className="flex gap-2 mt-3" data-testid={`review-photos-${i}`}>
+                    {r.photos.map((ph, j) => (
+                      <a key={j} href={reviewPhotoUrl(ph)} target="_blank" rel="noreferrer">
+                        <img
+                          src={reviewPhotoUrl(ph)}
+                          alt={`Customer photo ${j + 1}`}
+                          loading="lazy"
+                          className="w-16 h-16 object-cover border border-zinc-200 hover:border-black transition-colors"
+                        />
+                      </a>
+                    ))}
+                  </div>
+                )}
                 <div className="flex items-center gap-1.5 mt-3 font-mono text-[10px] tracking-widest text-zinc-500">
                   <span className="text-black font-bold">{r.name.toUpperCase()}</span>
                   {r.verified && (

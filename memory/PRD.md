@@ -25,7 +25,7 @@ Build a website inspired by bonkerscorner.com and wtflex.in — a premium Gen-Z 
 
 ## Implemented (2026-09-19)
 - Backend: GET /api/products (category/q/sort/tag filters, rating summary attached), GET /api/products/{id}, GET/POST /api/products/{id}/reviews (validated 1-5), POST /api/orders (server-side pricing, promo validation, free shipping ≥$75), idempotent product + review seeds on startup
-- Reviews: seeded 4-11 reviews per product (deterministic), stars + count on product cards, full reviews section on product pages (avg score card, verified-buyer list, write-a-review form)
+- Reviews: seeded 4-11 reviews per product (deterministic), most with customer fit-pic photos; stars + count on product cards; full reviews section on product pages (avg score card, verified-buyer list, write-a-review form with photo upload via Emergent object storage, served through /api/review-photos/)
 - INR base pricing (₹799-₹1,899, India-market price points) + currency switcher in navbar (INR/USD/EUR/GBP, static display rates, persisted in browser); free shipping ≥₹2,999, flat ₹99; orders stored in INR
 - Product pages: details accordion (Description/Details/Material/Returns & Refunds — 24h return window, 50-day store credit refunds, size-only exchanges) + PIN code delivery check (POST /api/delivery/check — metro 2-3 days, standard 4-6, remote 6-8 no COD) + 8-image scrollable gallery (PIL-generated flip/zoom/crop variants in /products/*-vN.jpg, imgix crop params for stock fallbacks) + colour selector (flows into cart + orders) + Best Offers box
 - Frontend: all pages and components above; data-testids throughout

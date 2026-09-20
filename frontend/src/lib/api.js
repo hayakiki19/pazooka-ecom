@@ -17,4 +17,12 @@ export const createReview = (id, payload) =>
 
 export const checkPin = (pin) => axios.post(`${API}/delivery/check`, { pin }).then((r) => r.data);
 
+export const reviewPhotoUrl = (p) => (p.startsWith("http") ? p : `${API}/review-photos/${p}`);
+
+export const uploadPhoto = (file) => {
+  const fd = new FormData();
+  fd.append("file", file);
+  return axios.post(`${API}/uploads`, fd).then((r) => r.data.path);
+};
+
 export const createOrder = (payload) => axios.post(`${API}/orders`, payload).then((r) => r.data);
