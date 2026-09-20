@@ -40,31 +40,11 @@ function DropBanner() {
   const y = useTransform(scrollYProgress, [0, 1], ["-10%", "10%"]);
 
   return (
-    <section ref={ref} data-testid="drop-banner" className="relative h-[100svh] min-h-[600px] overflow-hidden bg-ink">
+    <section ref={ref} data-testid="drop-banner" className="relative h-[160svh] min-h-[900px] overflow-hidden bg-ink">
       <motion.div style={{ y }} className="absolute -inset-y-[12%] inset-x-0 will-change-transform">
-        <BannerSlider images={DROP_SLIDES} interval={4200} imgClassName="opacity-60" testId="drop" />
+        <BannerSlider images={DROP_SLIDES} interval={4200} imgClassName="opacity-90" testId="drop" />
       </motion.div>
-      <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-black/40 pointer-events-none" />
-      <div className="relative z-10 h-full max-w-[1536px] mx-auto px-4 sm:px-8 lg:px-12 flex flex-col items-center justify-center text-center">
-        <Reveal>
-          <p className="font-mono text-[10px] sm:text-xs tracking-[0.4em] text-acid mb-6">VOL.04 // ACID CULTURE</p>
-        </Reveal>
-        <Reveal delay={0.1}>
-          <h2 className="font-display text-white leading-[0.82] text-[18vw] sm:text-[14vw] lg:text-[11rem]">
-            THE DROP<br /><span className="text-acid">IS LIVE.</span>
-          </h2>
-        </Reveal>
-        <Reveal delay={0.2}>
-          <p className="text-zinc-300 max-w-md mt-7 text-sm sm:text-base leading-relaxed">
-            21 heavyweight pieces. 250 units each. When they're gone, they're gone forever.
-          </p>
-        </Reveal>
-        <Reveal delay={0.3}>
-          <Link to="/shop?tag=NEW DROP" data-testid="drop-banner-cta" className="group mt-9 inline-flex items-center gap-3 bg-acid text-black font-syne font-bold text-sm px-10 py-4 hover:bg-white transition-colors duration-200">
-            SHOP THE DROP <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
-          </Link>
-        </Reveal>
-      </div>
+      <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-transparent to-black/50 pointer-events-none" />
     </section>
   );
 }
